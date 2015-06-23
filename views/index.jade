@@ -3,8 +3,17 @@ head
 
 	link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/css/reveal.css')
 	link#theme(rel='stylesheet', href='/styles/black.css')
-    
+	link(rel='stylesheet', href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css")
+	
 body
+	.row#input-area
+		form.col.s12
+			.row
+				.input-field.col.s6
+					input#title.validate(type="text")
+					label(for="title") Presentation Title
+					a.waves-effect.waves-light.btn#generate Make Presentation	
+	
 	.reveal
 		.slides
 			section
@@ -12,5 +21,7 @@ body
 				h2 By Abhinav Madahar
 
 	script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js")
 	script(src="socket.io/socket.io.js")
 	script(src="scripts/index.js")
