@@ -4,6 +4,7 @@ var uglify = require('gulp-uglify');
 var browserify = require('gulp-browserify');
 var stylus = require('gulp-stylus');
 var minify = require('gulp-minify-css');
+var gulpif = require('gulp-if');
 var logarithmic = require('logarithmic');
 
 gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
@@ -11,8 +12,8 @@ gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
 });
 
 gulp.task("scripts", function () {
-	gulp.src("source/scripts/*.coffee")
-		.pipe(coffee({bare: true}).on('error', logarithmic.error))
+	gulp.src("source/scripts/*")
+		.pipe(gulpif(/[.]coffee$/, coffee({bare: true}).on('error', logarithmic.error)))
 		.pipe(browserify())
 		.pipe(uglify())
 		.pipe(gulp.dest("public/scripts"))
