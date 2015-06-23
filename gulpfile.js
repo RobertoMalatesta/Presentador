@@ -17,10 +17,19 @@ gulp.task("scripts", function () {
 		.pipe(gulp.dest("public/scripts"))
 });
 
-gulp.task("styles", function() {
+gulp.task("css", function() {
+	gulp.src("source/styles/*.css")
+		.pipe(gulp.dest("public/styles"))
+});
+
+gulp.task("stylus", function() {
 	gulp.src("source/styles/*.styl")
 		.pipe(stylus())
 		.pipe(gulp.dest("public/styles"))
+});
+
+gulp.task("styles", ["stylus", "css"], function(){
+	// let the other functions do the work
 });
 
 gulp.task("images", function() {
