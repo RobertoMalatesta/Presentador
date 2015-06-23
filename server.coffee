@@ -30,7 +30,7 @@ else
 		client.on 'get page', (pageName) ->
 			easypedia pageName, (page) ->
 				io.to(client.id).emit('new page', page);
-				maxLinks = 20 # how many links to search for
+				maxLinks = process.env.MAXLINKS ? 20 # how many links to search for
 				for link in page.links.slice(0, maxLinks)
 					easypedia link, (relatedPage) ->
 						if page.name in relatedPage.links
