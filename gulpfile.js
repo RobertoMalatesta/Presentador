@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var coffee = require('gulp-coffee');
+var logarithmic = require('logarithmic');
 
 gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
 	// does nothing by itself
@@ -6,6 +8,7 @@ gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
 
 gulp.task("scripts", function () {
 	gulp.src("source/scripts/*.coffee")
+		.pipe(coffee({bare: true}).on('error', logarithmic.error))
 		.pipe(gulp.dest("public/scripts"))
 });
 
