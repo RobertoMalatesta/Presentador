@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var coffee = require('gulp-coffee');
 var uglify = require('gulp-uglify');
 var browserify = require('gulp-browserify');
+var stylus = require('gulp-stylus');
 var logarithmic = require('logarithmic');
 
 gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
@@ -18,6 +19,7 @@ gulp.task("scripts", function () {
 
 gulp.task("styles", function() {
 	gulp.src("source/styles/*.styl")
+		.pipe(stylus())
 		.pipe(gulp.dest("public/styles"))
 });
 
