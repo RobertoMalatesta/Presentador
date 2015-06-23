@@ -1,10 +1,10 @@
 head
 	title Presentador
 
-	link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/css/reveal.css')
+	link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/css/reveal.min.css')
 	link#theme(rel='stylesheet', href='/styles/black.css')
 	link(rel='stylesheet', href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css")
-	
+
 body
 	.row#input-area
 		form.col.s12
@@ -12,16 +12,16 @@ body
 				.input-field.col.s6
 					input#title.validate(type="text")
 					label(for="title") Presentation Title
-					a.waves-effect.waves-light.btn#generate Make Presentation	
-	
+					a.waves-effect.waves-light.btn#generate Make Presentation
+
 	.reveal
 		.slides
 			section
 				h1 Presentador
 				h2 By Abhinav Madahar
 
-	script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.min.js")
 	script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
 	script(src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js")
-	script(src="socket.io/socket.io.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js")
 	script(src="scripts/index.js")
