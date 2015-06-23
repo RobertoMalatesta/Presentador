@@ -30,6 +30,11 @@ else
 		client.on 'get page', (pageName) ->
 			easypedia pageName, (page) ->
 				io.to(client.id).emit('new page', page);
+				maxLinks = 20 # how many links to search for
+				for link in page.links.slice(0, maxLinks)
+					easypedia link, (relatedPage) ->
+						if page.name in relatedPage.links
+							io.to(client.id).emit('new page', relatedPage);
 
 	port = process.env.PORT ? 8080
 	hostname = process.env.HOSTNAME ? "0.0.0.0"

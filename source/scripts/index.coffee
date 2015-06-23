@@ -2,8 +2,11 @@ socket = io.connect "http://localhost:8080"
 
 class section
     constructor: (@json) ->
-        @id = @json.name.replace(/ /g , "").toLowerCase()
-        console.log @json
+        @id = @json.name
+            .replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+            .replace(/\s{2,}/g,"")
+            .replace(/ /g, "")
+            .toLowerCase()
 
     use: () ->
         $(".slides").append "<section id='#{@id}'>
