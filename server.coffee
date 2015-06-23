@@ -1,17 +1,29 @@
-express = require 'express'
-http = require 'http'
+cluster = require 'cluster'
 logarithmic = require 'logarithmic'
 
-app = express()
-server = http.createServer app
+if cluster.isMaster
+	slaves = process.env.SLAVES ? require("os").cpus().length ? 2
+	cluster.fork() for [1..slaves]
+	logarithmic.alert "Now making", slaves, "slaves"
 
-app.use express.static __dirname + '/public'
+	cluster.on "exit", () ->
+		logarithmic.warning "A slave died. Now trying to respawn"
+		cluster.fork()
 
-app.get '/', (request, response) ->
-	response.render "index.jade"
+else
+	express = require 'express'
+	http = require 'http'
 
-port = process.env.PORT ? 8080
-hostname = process.env.HOSTNAME ? "0.0.0.0"
-backlog = process.env.BACKLOG ? 512
-server.listen port, hostname, backlog, () ->
-	logarithmic.ok "Server running on port", port
+	app = express()
+	server = http.createServer app
+
+	app.use express.static __dirname + '/public'
+
+	app.get '/', (request, response) ->
+		response.render "index.jade"
+
+	port = process.env.PORT ? 8080
+	hostname = process.env.HOSTNAME ? "0.0.0.0"
+	backlog = process.env.BACKLOG ? 512
+	server.listen port, hostname, backlog, () ->
+		logarithmic.ok "Slave running on port", port
