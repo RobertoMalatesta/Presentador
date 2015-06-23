@@ -1,4 +1,4 @@
-socket = io.connect "http://localhost:8080"
+socket = io.connect "https://presentador-abhinavmadahar.c9.io", {secure: true}
 
 class section
     constructor: (@json) ->
