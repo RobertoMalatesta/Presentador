@@ -14,6 +14,7 @@ else
 	express = require 'express'
 	http = require 'http'
 	socketio = require 'socket.io'
+	easypedia = require 'easypedia'
 
 	app = express()
 	server = http.Server app
@@ -27,8 +28,8 @@ else
 		client.on 'error', (err) -> logarithmic.error err.stack
 
 		client.on 'get page', (pageName) ->
-			page = {} # TODO: get the Wikipedia page
-			io.to(client.id).emit('new page', page);
+			easypedia pageName, (page) ->
+				io.to(client.id).emit('new page', page);
 
 	port = process.env.PORT ? 8080
 	hostname = process.env.HOSTNAME ? "0.0.0.0"
