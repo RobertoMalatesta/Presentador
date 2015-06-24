@@ -27,11 +27,20 @@ class section
 socket.on 'new page', (page) ->
 	new section(page).use()
 
+slideSpeed = 350 # milliseconds
+
 $("#generate").click () ->
     title = $("#title").val()
     if title.replace(/ /, "") isnt ""
         socket.emit "get page", title
-        $("#input-area").remove()
+        $("#input-area").slideUp slideSpeed
+
+$(document).keydown (event) ->
+    if event.keyCode is 220
+        if $("#input-area").css("display") is "none"
+            $("#input-area").slideDown slideSpeed
+        else
+            $("#input-area").slideUp slideSpeed
 
 Reveal.initialize({
 	center: true
