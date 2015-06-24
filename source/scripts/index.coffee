@@ -24,7 +24,7 @@ class section
             sectionHTML = "<section><h2>#{keySection}</h2><p>"
             for keySentence, sentence of section
                 if sectionHTML.length < maxLength
-                    sectionHTML += sentence.text + " "
+                    sectionHTML += sentence.text.replace(/ *\([^)]*\) */g, "") + " "
             sectionHTML += "</p></section>"
             $("##{@id}").append(sectionHTML)
 
