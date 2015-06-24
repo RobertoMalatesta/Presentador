@@ -9,6 +9,10 @@ class section
             .toLowerCase()
 
     use: () ->
+        # don't add a slide if one exists with the same id
+        if $("##{@id}").length isnt 0
+            return
+        
         $(".slides").append "<section id='#{@id}'>
             <section>
                 <h1>#{@json.name}</h1>
