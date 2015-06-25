@@ -12,6 +12,8 @@ app.use express.static __dirname + '/public'
 
 app.get '/', (request, response) ->
 	response.render 'index.jade'
+app.get '/:topic', (request, response) ->
+	response.render 'index.jade'
 
 io.sockets.on 'connection', (client) ->
 	client.on 'hello', (name) ->

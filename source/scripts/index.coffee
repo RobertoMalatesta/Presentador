@@ -46,6 +46,14 @@ $(document).keydown (event) ->
         else
             $("#input-area").slideUp slideSpeed
 
+# if the URL is something like presentr.tk/Karl_Marx then start with Karl Marx
+$(document).ready () ->
+    startTopic = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
+    console.log startTopic
+    if startTopic isnt ""
+        socket.emit "get page", startTopic
+        $("#input-area").hide()
+
 Reveal.initialize({
 	center: true
 })
