@@ -48,8 +48,19 @@ It is set up to use websockets to deliver the raw data as JSON via Socket.io, wh
 I also used 2 of my own modules, `logarithmic` and `easypedia` for their intended purposes.
 
 ### Supported Platforms
-The platforms tested for are:
-- Chrome 44 (Beta)
-- Chrome for Android
+The supported platforms come in tiers. All platforms need to have JavaScript available.
 
-Does it work or not work on your platform? Make a new issue on GitHub.
+It will work for:
+- Internet Explorer 8+
+- Safari 3+
+- Google Chrome 4+
+- Firefox 3+
+- Opera 10.61+
+- iPhone Safari
+- iPad Safari
+- Android WebKit
+- WebOs WebKit
+
+That said, IE8 will only have the slides in 1 long, scrollable page. IE9 and Firefox 3.6 and lower will not have animations.
+
+Does not work on your platform? Make a new issue on GitHub.
