@@ -1,5 +1,11 @@
 socket = io.connect()
 
+correctMarkup = (sentence) ->
+    sentence.indexOf("|") is -1 and sentence.indexOf("{{") is -1
+
+useful = (sentence) ->
+    sentence.length > 40 and correctMarkup sentence
+
 class section
     constructor: (@json) ->
         @id = @json.name
@@ -12,7 +18,7 @@ class section
         # don't add a slide if one exists with the same id
         if $("##{@id}").length isnt 0
             return
-        
+
         $(".slides").append "<section id='#{@id}'>
             <section>
                 <h1>#{@json.name}</h1>
@@ -23,7 +29,7 @@ class section
 
             sectionHTML = "<section><h2>#{keySection}</h2><p>"
             for keySentence, sentence of section
-                if sectionHTML.length < maxLength
+                if useful(sentence.text) and sectionHTML.length < maxLength
                     sectionHTML += sentence.text.replace(/ *\([^)]*\) */g, "") + " "
             sectionHTML += "</p></section>"
             $("##{@id}").append(sectionHTML)
