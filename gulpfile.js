@@ -7,7 +7,7 @@ var minify = require('gulp-minify-css');
 var gulpif = require('gulp-if');
 var logarithmic = require('logarithmic');
 
-gulp.task("default", ["scripts", "styles", "images", "watch"], function() {
+gulp.task("default", ["scripts", "styles", "images"], function() {
 	// does nothing by itself
 });
 
@@ -41,7 +41,7 @@ gulp.task("images", function() {
 		.pipe(gulp.dest("public/images"))
 })
 
-gulp.task("watch", function() {
+gulp.task("watch", ["default"], function() {
 	gulp.watch("source/scripts/*.coffee", ["scripts"]);
 	gulp.watch("source/styles/*.styl", ["styles"]);
 });
