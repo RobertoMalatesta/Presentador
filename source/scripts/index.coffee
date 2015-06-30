@@ -6,6 +6,8 @@ correctMarkup = (sentence) ->
 useful = (sentence) ->
     sentence.length > 40 and correctMarkup sentence
 
+slides = $(".slides") # cache
+
 class section
     constructor: (@json) ->
         @id = @json.name
@@ -26,17 +28,19 @@ class section
 
     use: () ->
         maxLength = 400 # how many characters a slide can have
+        topSection = $("##{@id}") # cache it now
 
         # don't add a slide if one exists with the same id
-        if $("##{@id}").length isnt 0
+        if topSection.length isnt 0
             return
 
-        $(".slides").append "<section id='#{@id}'>
+        slides.append "<section id='#{@id}'>
             <section>
                 <h1>#{@name}</h1>
                 <h2>#{@subtitle or ""}</h1>
             </section>
         </section>"
+        topSection = $("##{@id}") # cache it now
         if not @subtitle
             for keySection, section of @json.text
 
@@ -45,7 +49,7 @@ class section
                     if useful(sentence.text) and sectionHTML.length < maxLength
                         sectionHTML += sentence.text.replace(/ *\([^)]*\) */g, "") + " "
                 sectionHTML += "</p></section>"
-                $("##{@id}").append(sectionHTML)
+                topSection.append(sectionHTML)
         else
             groups = []
             currentGroup = ""
@@ -59,10 +63,10 @@ class section
             sectionHTML = ""
             for group in groups
                 sectionHTML += "<section><p>#{group}</p></section>"
-            $("##{@id}").append(sectionHTML)
+            topSection.append(sectionHTML)
 
 socket.on 'new page', (page) ->
-	new section(page).use()
+    new section(page).use()
 
 slideSpeed = 350 # milliseconds
 
