@@ -15,6 +15,8 @@ app.get '/', (request, response) ->
 app.get '/:topic', (request, response) ->
 	response.render 'index.jade'
 
+maxLinks = process.env.MAXLINKS or 30 # how many links to search for
+
 io.sockets.on 'connection', (client) ->
 	client.on 'hello', (name) ->
 		console.log name
@@ -23,7 +25,6 @@ io.sockets.on 'connection', (client) ->
 		easypedia pageName, (page) ->
 			io.to(client.id).emit('new page', page);
 
-			maxLinks = process.env.MAXLINKS or Infinity # how many links to search for
 			for link in page.links.slice(0, maxLinks)
 				easypedia link, (relatedPage) ->
 					if page.name in relatedPage.links
@@ -33,4 +34,4 @@ port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
 backlog = process.env.BACKLOG or 512
 server.listen port, hostname, backlog, ->
-	logarithmic.ok "Server started on port", port
+	logarithmic.ok "Server started on port", port, "with at most", maxLinks, "links"
