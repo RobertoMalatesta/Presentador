@@ -70,11 +70,14 @@ socket.on 'new page', (page) ->
 
 slideSpeed = 350 # milliseconds
 
-$("#generate").click () ->
+generate = () ->
 	title = $("#title").val()
 	if title.replace(/ /, "") isnt ""
 		socket.emit "get page", title
 		$("#input-area").slideUp slideSpeed
+
+$("#generate").click () ->
+	generate()
 
 $(document).keydown (event) ->
 	if event.keyCode is 220
@@ -83,12 +86,18 @@ $(document).keydown (event) ->
 		else
 			$("#input-area").slideUp slideSpeed
 
+
 # if the URL is something like presentr.tk/Karl_Marx then start with Karl Marx
 $(document).ready () ->
 	startTopic = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
 	if startTopic isnt ""
 		socket.emit "get page", startTopic
 		$("#input-area").hide()
+
+	# jQuery had a bug where it registered the enter press many times, so use pure JS
+	document.getElementById("title").onkeypress = (event) ->
+		if event.keyCode is 13 # enter key
+			generate()
 
 Reveal.initialize({
 	center: true

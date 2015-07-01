@@ -11,9 +11,18 @@ body
 			.row
 				.input-field.col.s6
 					input#title.validate(type="text", style="color: white")
-					label(for="title") Presentation Title
+					label(for='title') Presentation Title
 					a.waves-effect.waves-light.btn#generate Make Presentation
-
+				// one of the problems with the code was that pressing enter on the search bar would redirect to /?
+				// the intended behaviour was not to redirect, but to generate the section
+				// the only solution I could find was to add another .input-field
+				// the problem was that I only needed 1, so I set this one to hide itself
+				// it is a messy solution, but the problem was huge, so I needed to do something
+				// I will try to find a better solution, but this is good enough for now
+				.input-field.col.s6(style="display: none")
+					input#last_name.validate(type='text')
+					label(for='ijeigjeihgeiohg') THIS SHOULD NEVER BEEN SEEN
+					
 	.reveal#reveal
 		.slides
 			section
