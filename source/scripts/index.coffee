@@ -73,12 +73,6 @@ socket.on 'new page', (page) ->
 slideSpeed = 350 # milliseconds
 
 titleSection = $("#title-section")
-loadingHTML = "
-	<div id='loading'>
-		<h1>Loading...</h1>
-		<img src='images/loading.gif'>
-	</div>
-"
 generate = (title = $("#title").val()) ->
 	if title.replace(/ /g, "") isnt ""
 		# clear the searchbar and move it away
@@ -87,7 +81,10 @@ generate = (title = $("#title").val()) ->
 
 		# say the page is loading
 		titleSection.children().hide()
-		titleSection.append loadingHTML
+		$("#loading").show()
+		setTimeout () ->
+			$("#beenAWhile").show()
+		, 3000
 
 		# ask for the page
 		socket.emit "get page", title
