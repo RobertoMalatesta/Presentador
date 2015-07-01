@@ -66,16 +66,31 @@ class section
 			topSection.append(sectionHTML)
 
 socket.on 'new page', (page) ->
+	$('#loading').remove()
+	titleSection.children().show()
 	new section(page).use()
 
 slideSpeed = 350 # milliseconds
 
-generate = () ->
-	title = $("#title").val()
-	$("#title").val("")
-	if title.replace(/ /, "") isnt ""
-		socket.emit "get page", title
+titleSection = $("#title-section")
+loadingHTML = "
+	<div id='loading'>
+		<h1>Loading...</h1>
+		<img src='images/loading.gif'>
+	</div>
+"
+generate = (title = $("#title").val()) ->
+	if title.replace(/ /g, "") isnt ""
+		# clear the searchbar and move it away
+		$("#title").val("")
 		$("#input-area").slideUp slideSpeed
+
+		# say the page is loading
+		titleSection.children().hide()
+		titleSection.append loadingHTML
+
+		# ask for the page
+		socket.emit "get page", title
 
 $("#generate").click () ->
 	generate()
@@ -92,8 +107,7 @@ $(document).keydown (event) ->
 $(document).ready () ->
 	startTopic = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
 	if startTopic isnt ""
-		socket.emit "get page", startTopic
-		$("#input-area").hide()
+		generate startTopic
 
 	# jQuery had a bug where it registered the enter press many times, so use pure JS
 	document.getElementById("title").onkeypress = (event) ->
