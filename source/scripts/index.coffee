@@ -72,6 +72,7 @@ slideSpeed = 350 # milliseconds
 
 generate = () ->
 	title = $("#title").val()
+	$("#title").val("")
 	if title.replace(/ /, "") isnt ""
 		socket.emit "get page", title
 		$("#input-area").slideUp slideSpeed
