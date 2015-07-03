@@ -46,7 +46,8 @@ class section
 				paragraph = ""
 				for sentence in section
 					paragraph += sentence.text + " " if paragraph.length < maxLength and useful sentence.text
-				topSection.append "<section><h2>#{keySection}</h2><p>#{paragraph}</p></section>"
+				if paragraph.length > 70
+					topSection.append "<section><h2>#{keySection}</h2><p>#{paragraph}</p></section>"
 
 		else # if only a singple section needs to be added
 			groups = []
