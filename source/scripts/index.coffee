@@ -41,16 +41,14 @@ class section
 			</section>
 		</section>"
 		topSection = $("##{@id}") # cache it now
-		if not @subtitle
+		if not @subtitle # if all the page needs to be added
 			for keySection, section of @json.text
+				paragraph = ""
+				for sentence in section
+					paragraph += sentence.text + " " if paragraph.length < maxLength and useful sentence.text
+				topSection.append "<section><h2>#{keySection}</h2><p>#{paragraph}</p></section>"
 
-				sectionHTML = "<section><h2>#{keySection}</h2><p>"
-				for keySentence, sentence of section
-					if useful(sentence.text) and sectionHTML.length < maxLength
-						sectionHTML += sentence.text.replace(/ *\([^)]*\) */g, "") + " "
-				sectionHTML += "</p></section>"
-				topSection.append(sectionHTML)
-		else
+		else # if only a singple section needs to be added
 			groups = []
 			currentGroup = ""
 			for sentence in @json.text[@subtitle]
