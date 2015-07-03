@@ -102,9 +102,10 @@ $(document).keydown (event) ->
 
 # if the URL is something like presentr.tk/Karl_Marx then start with Karl Marx
 $(document).ready () ->
-	startTopic = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
-	if startTopic isnt ""
-		generate startTopic
+	startTopics = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
+	if startTopics isnt ""
+		for startTopic in startTopics.split "+"
+			generate startTopic
 
 	# jQuery had a bug where it registered the enter press many times, so use pure JS
 	document.getElementById("title").onkeypress = (event) ->
