@@ -110,6 +110,5 @@ $(document).ready () ->
 		if event.keyCode is 13 # enter key
 			generate()
 
-Reveal.initialize({
+Reveal.initialize
 	center: true
-})
