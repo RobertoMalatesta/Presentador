@@ -8,13 +8,16 @@ useful = (sentence) ->
 
 slides = $(".slides") # cache
 
+makeId = (name) ->
+	name
+		.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+		.replace(/\s{2,}/g,"")
+		.replace(/ /g, "")
+		.toLowerCase()
+
 class section
 	constructor: (@json) ->
-		@id = @json.name
-			.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "")
-			.replace(/\s{2,}/g,"")
-			.replace(/ /g, "")
-			.toLowerCase()
+		@id = makeId @json.name
 		if "#" in @json.name
 			@name = @json.name
 				.substring(/#/g, @json.name.indexOf("#"))
@@ -69,6 +72,10 @@ socket.on 'new page', (page) ->
 	titleSection.children().show()
 	new section(page).use()
 
+socket.on 'new image', (image) ->
+	$("#title-section").attr "data-background", image.url
+	Reveal.initialize()
+
 slideSpeed = 350 # milliseconds
 
 titleSection = $("#title-section")
@@ -87,6 +94,8 @@ generate = (title = $("#title").val()) ->
 
 		# ask for the page
 		socket.emit "get page", title
+
+		socket.emit "get image", title
 
 $("#generate").click () ->
 	generate()

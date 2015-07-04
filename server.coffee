@@ -3,6 +3,7 @@ http = require 'http'
 socketio = require 'socket.io'
 easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
+fotology = require 'fotology'
 
 app = express()
 server = http.Server(app)
@@ -29,6 +30,11 @@ io.sockets.on 'connection', (client) ->
 				easypedia link, (relatedPage) ->
 					if page.name in relatedPage.links
 						io.to(client.id).emit 'new page', relatedPage
+	client.on 'get image', (imageSearchTerm) ->
+		fotology imageSearchTerm, (imageURLs) ->
+			io.to(client.id).emit 'new image',
+				name: imageSearchTerm
+				url: imageURLs[0]
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
