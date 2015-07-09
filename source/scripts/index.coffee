@@ -6,7 +6,7 @@ correctMarkup = (sentence) ->
 useful = (sentence) ->
 	sentence.length > 40 and correctMarkup sentence
 
-slides = $(".slides") # cache
+slides = $(".slides") # cache it
 
 makeId = (name) ->
 	name
