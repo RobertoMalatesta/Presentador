@@ -96,7 +96,9 @@ generate = (title = $("#title").val()) ->
 		# ask for the page
 		socket.emit "get page", title
 
-		socket.emit "get image", title
+		# do not use more than one image
+		if not $("#title-section").attr("data-background")?
+			socket.emit "get image", title
 
 $("#generate").click () ->
 	generate()
