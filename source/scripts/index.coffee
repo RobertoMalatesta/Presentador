@@ -29,6 +29,8 @@ class section
 		else
 			@name = @json.name
 				.replace(/_/g, " ")
+				.replace(/the/g, "")
+				.replace(/The/g, "")
 
 	use: () ->
 		maxLength = 400 # how many characters a slide can have
