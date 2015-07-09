@@ -115,6 +115,7 @@ $(document).keydown (event) ->
 
 # if the URL is something like presentr.tk/Karl_Marx then start with Karl Marx
 $(document).ready () ->
+	# if the url is presentador.co/TOPIC+OTHERTOPIC+NEXTONE then TOPIC, OTHERTOPIC, NEXTONE are topics
 	startTopics = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
 	if startTopics isnt ""
 		for startTopic in startTopics.split "+"
