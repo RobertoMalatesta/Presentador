@@ -76,8 +76,9 @@ socket.on 'new page', (page) ->
 	new section(page).use()
 
 socket.on 'new image', (image) ->
-	$("#title-section").attr "data-background", image.url
-	Reveal.initialize()
+	if not $("#title-section").attr("data-background")?
+		$("#title-section").attr "data-background", image.url
+		Reveal.initialize()
 
 slideSpeed = 350 # milliseconds
 
@@ -97,10 +98,6 @@ generate = (title = $("#title").val()) ->
 
 		# ask for the page
 		socket.emit "get page", title
-
-		# do not use more than one image
-		if not $("#title-section").attr("data-background")?
-			socket.emit "get image", title
 
 $("#generate").click () ->
 	generate()

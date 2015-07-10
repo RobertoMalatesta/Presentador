@@ -19,22 +19,25 @@ app.get '/:topic', (request, response) ->
 maxLinks = process.env.MAXLINKS or 30 # how many links to search for
 
 io.sockets.on 'connection', (client) ->
-	client.on 'hello', (name) ->
-		console.log name
-
 	client.on 'get page', (pageName) ->
 		easypedia pageName, (page) ->
 			io.to(client.id).emit('new page', page);
+
+			# Wikipedia has a list of the images in a page
+			# because we know those images exist, we want to use them
+			# however, getting the images from Wikipedia is slow
+			# thus, just search for the images on Google Image search
+			# also, if no images were found, just use the original pageName
+			imageSearchTerm = pageName
+			fotology imageSearchTerm, {size: "large", safe:on}, (imageURLs) ->
+				io.to(client.id).emit 'new image',
+					name: imageSearchTerm
+					url: imageURLs[0]
 
 			for link in page.links.slice(0, maxLinks)
 				easypedia link, (relatedPage) ->
 					if page.name in relatedPage.links
 						io.to(client.id).emit 'new page', relatedPage
-	client.on 'get image', (imageSearchTerm) ->
-		fotology imageSearchTerm, (imageURLs) ->
-			io.to(client.id).emit 'new image',
-				name: imageSearchTerm
-				url: imageURLs[0]
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
