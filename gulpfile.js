@@ -13,7 +13,7 @@ gulp.task("default", ["scripts", "styles", "images"], function() {
 
 gulp.task("scripts", function () {
 	gulp.src("source/scripts/*")
-		.pipe(gulpif(/[.]coffee$/, coffee({bare: true}).on('error', logarithmic.error)))
+		.pipe(coffee({bare: true}).on('error', logarithmic.error))
 		.pipe(browserify())
 		.pipe(uglify())
 		.pipe(gulp.dest("public/scripts"))
