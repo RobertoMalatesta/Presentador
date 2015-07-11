@@ -7,14 +7,17 @@ var minify = require('gulp-minify-css');
 var gulpif = require('gulp-if');
 var logarithmic = require('logarithmic');
 
-gulp.task("default", ["scripts", "styles", "images"], function() {
+gulp.task("default", ["coffee", "styles", "images"], function() {
 	// does nothing by itself
 });
 
-gulp.task("scripts", function () {
-	gulp.src("source/scripts/*")
+gulp.task("coffee", function () {
+	gulp.src("source/scripts/client.coffee")
 		.pipe(coffee({bare: true}).on('error', logarithmic.error))
-		.pipe(browserify())
+		.pipe(browserify({
+			transform: ["coffeeify"],
+			extensions: ['.coffee']
+		}))
 		.pipe(uglify())
 		.pipe(gulp.dest("public/scripts"))
 });
@@ -42,6 +45,6 @@ gulp.task("images", function() {
 })
 
 gulp.task("watch", ["default"], function() {
-	gulp.watch("source/scripts/*.coffee", ["scripts"]);
+	gulp.watch("source/scripts/*.coffee", ["coffee"]);
 	gulp.watch("source/styles/*.styl", ["styles"]);
 });

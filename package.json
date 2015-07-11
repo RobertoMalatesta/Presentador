@@ -19,6 +19,7 @@
   "dependencies": {
     "chai": "^3.0.0",
     "cluster": "^0.7.7",
+    "coffeeify": "^1.1.0",
     "easypedia": "^1.3.1",
     "express": "^4.13.0",
     "fotology": "^1.1.0",

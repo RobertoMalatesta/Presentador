@@ -1,79 +1,13 @@
+makeSection = require './section.coffee'
+
 socket = io.connect()
 
-correctMarkup = (sentence) ->
-	sentence.indexOf("|") is -1 and sentence.indexOf("{{") is -1
-
-useful = (sentence) ->
-	sentence.length > 40 and correctMarkup sentence
-
 slides = $(".slides") # cache it
-
-makeId = (name) ->
-	name
-		.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "")
-		.replace(/\s{2,}/g,"")
-		.replace(/ /g, "")
-		.replace(/'/g, "")
-		.toLowerCase()
-
-class section
-	constructor: (@json) ->
-		@id = makeId @json.name
-		if "#" in @json.name
-			@name = @json.name
-				.substring(/#/g, @json.name.indexOf("#"))
-				.replace(/_/g, " ")
-			@subtitle = @json.name
-				.substring(@json.name.indexOf("#") + 1)
-				.replace(/_/g, " ")
-		else
-			@name = @json.name
-				.replace(/_/g, " ")
-				.replace(/the/g, "")
-				.replace(/The/g, "")
-
-	use: () ->
-		maxLength = 400 # how many characters a slide can have
-		topSection = $("##{@id}") # cache it now
-
-		# don't add a slide if one exists with the same id
-		if topSection.length isnt 0
-			return
-
-		slides.append "<section id='#{@id}'>
-			<section>
-				<h1>#{@name}</h1>
-				<h2>#{@subtitle or ""}</h1>
-			</section>
-		</section>"
-		topSection = $("##{@id}") # cache it now
-		if not @subtitle # if all the page needs to be added
-			for keySection, section of @json.text
-				paragraph = ""
-				for sentence in section
-					paragraph += sentence.text + " " if paragraph.length < maxLength and useful sentence.text
-				if paragraph.length > 70
-					topSection.append "<section><h2>#{keySection}</h2><p>#{paragraph}</p></section>"
-
-		else # if only a singple section needs to be added
-			groups = []
-			currentGroup = ""
-			for sentence in @json.text[@subtitle]
-				if currentGroup.length < maxLength
-					currentGroup += sentence.text + " "
-				else
-					groups.push currentGroup
-					currentGroup = sentence.text + " " # reset it
-
-			sectionHTML = ""
-			for group in groups
-				sectionHTML += "<section><p>#{group}</p></section>"
-			topSection.append(sectionHTML)
 
 socket.on 'new page', (page) ->
 	$('#loading').remove()
 	titleSection.children().show()
-	new section(page).use()
+	slides.append makeSection page
 
 socket.on 'new image', (image) ->
 	if not $("#title-section").attr("data-background")?
