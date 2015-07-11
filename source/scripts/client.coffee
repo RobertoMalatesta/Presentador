@@ -45,9 +45,9 @@ socket.on 'new page', (page) ->
 	animations.loading.hide()
 	slides.append makeSection page
 
-socket.on 'new image', (image) ->
+socket.on 'new image', (imageURL) ->
 	if not titleSection.attr("data-background")?
-		titleSection.attr "data-background", image.url
+		titleSection.attr "data-background", imageURL
 		Reveal.initialize()
 
 generate = (title = titleForm.val()) ->
