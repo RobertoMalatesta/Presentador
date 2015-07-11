@@ -63,7 +63,7 @@ make =
 
 	entire: (title, sections) ->
 		sectionsHTML = # open the section and add the title
-			"<section>
+			"<section id='#{make.id title}'>
 				<section>
 					<h1>#{title}</h1>
 				</section>"
@@ -91,7 +91,7 @@ make =
 	subsection: (title, section) ->
 		sentences = section.map extractText
 
-		sectionHTML = "<section><section><h1>#{title}</h1></section>"
+		sectionHTML = "<section id='#{make.id title}'><section><h1>#{title}</h1></section>"
 		for slide in make.pseudoSlides sentences
 			sectionHTML += "<section><p>#{slide}</p></section>"
 		sectionHTML += "</section>"
@@ -102,6 +102,9 @@ use = (json) ->
 	# set up the variables that will be used
 	id = make.id json.name
 	name = make.name json.name
+
+	if document.getElementById(id)?
+		return
 
 	if not ("#" in json.name)
 		make.entire name, json.text
