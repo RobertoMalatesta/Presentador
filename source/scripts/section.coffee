@@ -13,7 +13,7 @@ quick definitions:
 ###
 
 slideLengthRange =
-	max: 400
+	max: 700
 	min: 100
 sentenceLengthRange =
 	# no max length
