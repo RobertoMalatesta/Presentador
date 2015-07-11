@@ -63,10 +63,13 @@ $(document).keydown (event) ->
 	if event.keyCode is 220 # backslash
 		animations.searchbar.toggle()
 
-# if the URL is something like presentr.tk/Karl_Marx then start with Karl Marx
 $(document).ready () ->
-	# if the url is presentador.co/TOPIC+OTHERTOPIC+NEXTONE then TOPIC, OTHERTOPIC, NEXTONE are topics
-	startTopics = (/[^/]*$/.exec(window.location.href)[0]).replace(/_/g, " ")
+	# takes in a url and returns everything after the first /
+	# extractTopics "google.com/AbhinavMadahar#Swag" -> "AbhinavMadahar#Swag"
+	extractTopics = (url) ->
+		(/[^/]*$/.exec(url)[0]).replace(/_/g, " ")
+
+	startTopics = extractTopics window.location.href
 	if startTopics isnt ""
 		generate startTopic for startTopic in startTopics.split "+"
 
