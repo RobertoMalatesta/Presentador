@@ -17,9 +17,13 @@ slideLengthRange =
 	min: 100
 sentenceLengthRange =
 	# no max length
-	min: 35
+	min: 40
 
-extractText = (sentence) -> sentence.text
+purifyText = (text) ->
+	text.replace("}}", "").replace("{{", "")
+extractText = (sentence) -> purifyText sentence.text
+usable = (text) ->
+	text.length > sentenceLengthRange.min and text.indexOf("|") is -1
 make =
 	id: (name) ->
 		name
@@ -44,9 +48,12 @@ make =
 			sentence.length + slideText.length <= slideLengthRange.max
 
 		for sentence in sentences
-			if enoughSpace sentence
+			if not usable sentence
+				console.log sentence
+
+			if enoughSpace(sentence) and usable sentence
 				slideText += sentence
-			else
+			else if not enoughSpace sentence
 				break
 
 		"<section>
