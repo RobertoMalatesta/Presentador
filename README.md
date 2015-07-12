@@ -9,7 +9,7 @@ Sometimes, the website may go down. If you want to be safe, you can host it your
 ### Requirements
 Before you host the website, you must have the following installed:
 - CoffeeScript executor
-	- Depends on the Node.js executor
+    - Depends on the Node.js executor
 - Git
 - Gulp
 - NPM, which is installed with Node.js

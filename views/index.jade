@@ -1,51 +1,51 @@
 head
-	title Presentador
+    title Presentador
 
-	link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/css/reveal.min.css')
-	link#theme(rel='stylesheet', href='/styles/black.css')
-	link(rel='stylesheet', href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css")
+    link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/css/reveal.min.css')
+    link#theme(rel='stylesheet', href='/styles/black.css')
+    link(rel='stylesheet', href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css")
 
 body
-	.row#input-area
-		form.col.s12
-			.row
-				.input-field.col.s6
-					input#title.validate(type="text", style="color: white")
-					label(for='title') Presentation Title
-					a.waves-effect.waves-light.btn#generate Make Presentation
-				// one of the problems with the code was that pressing enter on the search bar would redirect to /?
-				// the intended behaviour was not to redirect, but to generate the section
-				// the only solution I could find was to add another .input-field
-				// the problem was that I only needed 1, so I set this one to hide itself
-				// it is a messy solution, but the problem was huge, so I needed to do something
-				// I will try to find a better solution, but this is good enough for now
-				.input-field.col.s6(style="display: none")
-					input#last_name.validate(type='text')
-					label(for='ijeigjeihgeiohg') THIS SHOULD NEVER BEEN SEEN
-					
-	.reveal#reveal
-		.slides
-			section
-				section#title-section
-					#loading(style="display:none")
-						h1 Loading...
-						h2#beenAWhile(style="display:none") Sure is taking a while...
-						img(src="images/loading.gif")
-					
-					h1 Presentador
-					h2
-						| By 
-						a(href="//github.com/AbhinavMadahar") Abhinav Madahar
-					p Navigate via the arrow keys
-					p
-						a(href="//github.com/AbhinavMadahar/Presentador") Source Code
-					p
-						a(href="//github.com/AbhinavMadahar/Presentador/issues") Bugs
+    .row#input-area
+        form.col.s12
+            .row
+                .input-field.col.s6
+                    input#title.validate(type="text", style="color: white")
+                    label(for='title') Presentation Title
+                    a.waves-effect.waves-light.btn#generate Make Presentation
+                // one of the problems with the code was that pressing enter on the search bar would redirect to /?
+                // the intended behaviour was not to redirect, but to generate the section
+                // the only solution I could find was to add another .input-field
+                // the problem was that I only needed 1, so I set this one to hide itself
+                // it is a messy solution, but the problem was huge, so I needed to do something
+                // I will try to find a better solution, but this is good enough for now
+                .input-field.col.s6(style="display: none")
+                    input#last_name.validate(type='text')
+                    label(for='ijeigjeihgeiohg') THIS SHOULD NEVER BEEN SEEN
+                    
+    .reveal#reveal
+        .slides
+            section
+                section#title-section
+                    #loading(style="display:none")
+                        h1 Loading...
+                        h2#beenAWhile(style="display:none") Sure is taking a while...
+                        img(src="images/loading.gif")
+                    
+                    h1 Presentador
+                    h2
+                        | By 
+                        a(href="//github.com/AbhinavMadahar") Abhinav Madahar
+                    p Navigate via the arrow keys
+                    p
+                        a(href="//github.com/AbhinavMadahar/Presentador") Source Code
+                    p
+                        a(href="//github.com/AbhinavMadahar/Presentador/issues") Bugs
 
-	script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.min.js")
-	script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
-	script(src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js")
-	script(src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js")
-	script(src="scripts/client.js")
-	script.
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-64693830-1', 'auto');ga('send', 'pageview');
+    script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js")
+    script(src="scripts/client.js")
+    script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-64693830-1', 'auto');ga('send', 'pageview');
