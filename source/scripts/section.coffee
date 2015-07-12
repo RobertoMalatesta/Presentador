@@ -7,7 +7,7 @@ Here is the syntax for adding a section via the JSON passed by Easypedia:
 
 quick definitions:
     sentence: a single sentence
-    slide: a group of sentences that are grouped as to put them on a single screen
+    slide: sentences grouped on a single screen
     subsection: a subsection from Wikipedia that Easypedia returned
     section: all the slides- goes linearly vertically
 ###
@@ -77,7 +77,8 @@ make =
         currentSlide = ""
         slides = []
 
-        shouldStartAnew = (sentence) -> sentence.length + currentSlide.length > slideLengthRange.max
+        shouldStartAnew = (sentence) ->
+            sentence.length + currentSlide.length > slideLengthRange.max
 
         for sentence in sentences
             if shouldStartAnew sentence
@@ -91,7 +92,12 @@ make =
     subsection: (title, section) ->
         sentences = section.map extractText
 
-        sectionHTML = "<section id='#{make.id title}'><section><h1>#{title}</h1></section>"
+        sectionHTML =
+            "<section id='#{make.id title}'>
+                <section>
+                    <h1>#{title}</h1>
+                </section>"
+            # keep the top section open so we can add slides into it
         for slide in make.pseudoSlides sentences
             sectionHTML += "<section><p>#{slide}</p></section>"
         sectionHTML += "</section>"
