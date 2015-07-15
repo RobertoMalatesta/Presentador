@@ -48,10 +48,7 @@ io.sockets.on 'connection', (client) ->
             for link in mainpage.links.slice 0, maxLinks
                 easypedia link, (linkedPage) ->
                     if isRelated linkedPage
-                        console.log "related", linkedPage.name
                         sendPage linkedPage
-                    else
-                        console.log "NOT related:", linkedPage.name
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
