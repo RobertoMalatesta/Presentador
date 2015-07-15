@@ -54,7 +54,7 @@ generate = (title = titleForm.val()) ->
     if title.replace(/ /g, "") isnt ""
         animations.searchbar.hide()
         animations.loading.show()
-        socket.emit "get page", title
+        socket.emit "get page", {title: title, language: "en"}
 
 generateButton.click () ->
     generate()
