@@ -1,62 +1,20 @@
 makeSection = require './section.coffee'
+animations = require "./animations.coffee"
+dom = require './dom.coffee'
 
 socket = io.connect()
-
-# cache the DOM elements that will be used
-slides = $ ".slides"
-loading = $ "#loading"
-titleSection = $ "#title-section"
-titleForm = $ "#title"
-inputArea = $ "#input-area"
-beenAWhile = $ "#beenAWhile"
-generateButton = $ "#generate"
-
-animations =
-    speed:
-        slide: 350
-        fade: 200
-
-    loading:
-        hide: () ->
-            loading.remove()
-            titleSection.children().show()
-        show: () ->
-            titleSection.children().hide()
-            loading.show()
-            setTimeout () ->
-                beenAWhile.show()
-            , 3000
-
-    searchbar:
-        hide: () ->
-            titleForm.val("")
-            inputArea.slideUp animations.speed.slide
-
-        show: () ->
-            inputArea.slideDown animations.speed.slide
-
-        toggle: () ->
-            if inputArea.css("display") is "none"
-                animations.searchbar.show()
-            else
-                animations.searchbar.hide()
+generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
     animations.loading.hide()
-    slides.append makeSection page
+    dom.div.slides.append makeSection page
 
 socket.on 'new image', (imageURL) ->
-    if not titleSection.attr("data-background")?
-        titleSection.attr "data-background", imageURL
+    if not dom.section.title.attr("data-background")?
+        dom.section.title.attr "data-background", imageURL
         Reveal.initialize()
 
-generate = (title = titleForm.val()) ->
-    if title.replace(/ /g, "") isnt ""
-        animations.searchbar.hide()
-        animations.loading.show()
-        socket.emit "get page", title
-
-generateButton.click () ->
+dom.button.generate.click () ->
     generate()
 
 $(document).keydown (event) ->
@@ -77,7 +35,9 @@ $(document).ready () ->
     # that is what DOM objects have, so we need that
     # the 0th object in a jQuery object is the DOM element
     # titleForm[0] is the DOM element, so use it
-    titleForm[0].onkeypress = (event) ->
+    dom.form.title[0].onkeypress = (event) ->
+        generate() if event.keyCode is 13 # enter key
+    dom.form.language[0].onkeypress = (event) ->
         generate() if event.keyCode is 13 # enter key
 
 Reveal.initialize
