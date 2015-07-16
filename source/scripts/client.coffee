@@ -3,6 +3,7 @@ animations = require "./animations.coffee"
 dom = require './dom.coffee'
 
 socket = io.connect()
+generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
     animations.loading.hide()
@@ -12,13 +13,6 @@ socket.on 'new image', (imageURL) ->
     if not dom.section.title.attr("data-background")?
         dom.section.title.attr "data-background", imageURL
         Reveal.initialize()
-
-generate = (title = dom.form.title.val(), language = dom.form.language.val()) ->
-    if title.replace(/ /g, "") isnt ""
-        console.log animations
-        animations.searchbar.hide()
-        animations.loading.show()
-        socket.emit "get page", {title: title, language: language}
 
 dom.button.generate.click () ->
     generate()
