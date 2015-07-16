@@ -10,6 +10,7 @@ titleForm = $ "#title"
 inputArea = $ "#input-area"
 beenAWhile = $ "#beenAWhile"
 generateButton = $ "#generate"
+languageForm = $ "#language"
 
 animations =
     speed:
@@ -50,11 +51,11 @@ socket.on 'new image', (imageURL) ->
         titleSection.attr "data-background", imageURL
         Reveal.initialize()
 
-generate = (title = titleForm.val()) ->
+generate = (title = titleForm.val(), language = languageForm.val()) ->
     if title.replace(/ /g, "") isnt ""
         animations.searchbar.hide()
         animations.loading.show()
-        socket.emit "get page", {title: title, language: "en"}
+        socket.emit "get page", {title: title, language: language}
 
 generateButton.click () ->
     generate()
@@ -78,6 +79,8 @@ $(document).ready () ->
     # the 0th object in a jQuery object is the DOM element
     # titleForm[0] is the DOM element, so use it
     titleForm[0].onkeypress = (event) ->
+        generate() if event.keyCode is 13 # enter key
+    languageForm[0].onkeypress = (event) ->
         generate() if event.keyCode is 13 # enter key
 
 Reveal.initialize

@@ -39,6 +39,7 @@ io.sockets.on 'connection', (client) ->
             options =
                 size: "large"
                 safe: true
+                language: page.language
             fotology imageSearchTerm, options, (imageURLs) ->
                 sendImage imageURLs[0]
 
@@ -46,7 +47,7 @@ io.sockets.on 'connection', (client) ->
                 mainpage.name in possible.links
 
             for link in mainpage.links.slice 0, maxLinks
-                easypedia link, (linkedPage) ->
+                easypedia link, {language: page.language}, (linkedPage) ->
                     if isRelated linkedPage
                         sendPage linkedPage
 

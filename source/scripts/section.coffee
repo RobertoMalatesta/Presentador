@@ -48,9 +48,6 @@ make =
             sentence.length + slideText.length <= slideLengthRange.max
 
         for sentence in sentences
-            if not usable sentence
-                console.log sentence
-
             if enoughSpace(sentence) and usable sentence
                 slideText += sentence
             else if not enoughSpace sentence
