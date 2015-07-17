@@ -51,7 +51,7 @@ make =
 
         for sentence in sentences
             if enoughSpace(sentence) and usable sentence
-                slideText += purify.text sentence
+                slideText += purify.text(sentence) + " "
             else if not enoughSpace sentence
                 break
 
