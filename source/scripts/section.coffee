@@ -12,6 +12,8 @@ quick definitions:
     section: all the slides- goes linearly vertically
 ###
 
+purify = require './purify.coffee'
+
 slideLengthRange =
     max: 500
     min: 100
@@ -49,7 +51,7 @@ make =
 
         for sentence in sentences
             if enoughSpace(sentence) and usable sentence
-                slideText += sentence
+                slideText += purify.text sentence
             else if not enoughSpace sentence
                 break
 
