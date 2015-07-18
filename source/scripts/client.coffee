@@ -40,5 +40,9 @@ $(document).ready () ->
     dom.form.language[0].onkeypress = (event) ->
         generate() if event.keyCode is 13 # enter key
 
+    random = (upperbound) -> Math.floor Math.random() * upperbound
+
+    dom.video.loading.attr "src", "images/loading/#{random 15}.mp4"
+
 Reveal.initialize
     center: true
