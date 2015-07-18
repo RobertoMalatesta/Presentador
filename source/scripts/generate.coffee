@@ -14,7 +14,6 @@ module.exports = (socket) ->
     (title = getTitle()) ->
         if isUsable title
             animations.searchbar.hide()
-            animations.loading.show()
             socket.emit "get page",
                 title: title
                 language: language()

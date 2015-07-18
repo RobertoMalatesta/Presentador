@@ -6,7 +6,6 @@ socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
-    animations.loading.hide()
     dom.div.slides.append makeSection page
 
 socket.on 'new image', (imageURL) ->
@@ -39,10 +38,6 @@ $(document).ready () ->
         generate() if event.keyCode is 13 # enter key
     dom.form.language[0].onkeypress = (event) ->
         generate() if event.keyCode is 13 # enter key
-
-    random = (upperbound) -> Math.floor Math.random() * upperbound
-
-    dom.video.loading.attr "src", "images/loading/#{random 15}.mp4"
 
 Reveal.initialize
     center: true
