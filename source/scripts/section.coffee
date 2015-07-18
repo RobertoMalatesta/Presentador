@@ -98,7 +98,7 @@ make =
         summary = make.summary sections.Intro or ""
 
         sectionsHTML = # open the section and add the title
-            "<section id='#{make.id title}'>
+            "<section id='#{make.id title}' class='stack future'>
                 <section>
                     <h1>#{title}</h1>
                     <p>#{summary}</p>
