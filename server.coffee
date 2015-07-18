@@ -4,6 +4,7 @@ socketio = require 'socket.io'
 easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
 fotology = require 'fotology'
+fs = require 'fs'
 
 app = express()
 server = http.Server app
@@ -11,10 +12,7 @@ io = socketio.listen server
 
 app.use express.static __dirname + '/public'
 
-app.get '/', (request, response) ->
-    response.render 'index.jade'
-app.get '/:topic', (request, response) ->
-    response.render 'index.jade'
+app.use require("./routes.coffee")
 
 maxLinks = process.env.MAXLINKS or 30 # how many links to search for
 
