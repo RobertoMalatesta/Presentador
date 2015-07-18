@@ -6,8 +6,14 @@ var stylus = require('gulp-stylus');
 var minify = require('gulp-minify-css');
 var logarithmic = require('logarithmic');
 
-gulp.task("default", ["coffee", "styles", "images"], function() {
+gulp.task("default", ["js", "coffee", "styles", "images"], function() {
     // does nothing by itself
+});
+
+gulp.task("js", function() {
+    gulp.src("source/scripts/*.js")
+        .pipe(uglify())
+        .pipe(gulp.dest("public/scripts"));
 });
 
 gulp.task("coffee", function () {

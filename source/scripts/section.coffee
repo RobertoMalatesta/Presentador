@@ -12,6 +12,8 @@ quick definitions:
     section: all the slides- goes linearly vertically
 ###
 
+purify = require './purify.coffee'
+
 slideLengthRange =
     max: 500
     min: 100
@@ -41,6 +43,40 @@ make =
         else # if the whole thing is wanted
             name.replace(/_/g, " ")
 
+    summary: (intro) ->
+        descriptors = ["is", "are", "was", "were", "will be", "been"]
+
+        isUsable = (sentence) ->
+            sentence.indexOf("{{") is -1 and
+            sentence.indexOf("}}") is -1
+
+        sentences = intro.map((x) -> x.text).filter isUsable
+
+        isDescription = (sentence) ->
+            for descriptor in descriptors
+                if sentence.indexOf(" #{descriptor} ") isnt -1
+                    return true
+            return false
+
+        findDescription = (sentences) ->
+            for sentence in sentences
+                if isDescription sentence
+                    return sentence
+
+        description = (sentence) ->
+            regex = /\s(is|are|was|were).*\./
+
+            return sentence.match(regex)[0]
+
+        capitalize = (text) ->
+            noLeadingSpaces = text.replace /\s*/, ""
+            noLeadingSpaces.charAt(0).toUpperCase() + noLeadingSpaces.slice 1
+
+        for sentence in sentences
+            if isDescription sentence
+                return capitalize description sentence
+        return ""
+
     slide: (heading, sentences) ->
         slideText = ""
 
@@ -49,7 +85,7 @@ make =
 
         for sentence in sentences
             if enoughSpace(sentence) and usable sentence
-                slideText += sentence
+                slideText += purify.text(sentence) + " "
             else if not enoughSpace sentence
                 break
 
@@ -59,10 +95,13 @@ make =
         </section>"
 
     entire: (title, sections) ->
+        summary = make.summary sections.Intro or ""
+
         sectionsHTML = # open the section and add the title
             "<section id='#{make.id title}'>
                 <section>
                     <h1>#{title}</h1>
+                    <p>#{summary}</p>
                 </section>"
         for heading, sentences of sections
             sectionsHTML += make.slide(heading, sentences.map extractText)
