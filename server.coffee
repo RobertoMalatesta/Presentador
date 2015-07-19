@@ -4,7 +4,6 @@ socketio = require 'socket.io'
 easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
 fotology = require 'fotology'
-fs = require 'fs'
 
 app = express()
 server = http.Server app
