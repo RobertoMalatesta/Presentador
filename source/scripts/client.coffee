@@ -1,4 +1,4 @@
-makeSection = require './section.coffee'
+makeSection = require './make.coffee'
 animations = require "./animations.coffee"
 dom = require './dom.coffee'
 
