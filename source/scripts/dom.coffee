@@ -1,4 +1,6 @@
 # this file manages the DOM objects
+# that way, the are cached at the start of the programme
+# by caching once, the programme runs much faster
 module.exports =
     div:
         slides: $ ".slides"

@@ -1,8 +1,11 @@
+# this function defines how to generate a presentation
+# it takes in a socket where it can latch to
+
 dom = require './dom.coffee'
 animations = require './animations.coffee'
 language = require './language.coffee'
 
-getTitle = () -> dom.form.title.val()
+getTitle = -> dom.form.title.val()
 
 isUsable = (title) -> title.replace(/ /g, "") isnt ""
 

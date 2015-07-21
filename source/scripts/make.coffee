@@ -1,9 +1,6 @@
 ###
-This file manages the process of making and adding a section.
-Here is the syntax for adding a section via the JSON passed by Easypedia:
-    makeSection = require "./section.coffee"
-    section = makeSection json
-    $(".slides").append section
+This function takes the Easypedia JSON and makes the section's HTML.
+However, it doesn't interact with the DOM, so another file has to add it.
 
 quick definitions:
     sentence: a single sentence
@@ -23,10 +20,13 @@ module.exports = (json) ->
     id = make.id json.name
     name = make.name json.name
 
+    # if the section is already added, don't readd it
     if document.getElementById(id)?
         return
 
-    if not ("#" in json.name)
-        make.section name, json.text
-    else
+    # hash separates the title and subtitle
+    # if there is a hash, it means that only part should be added
+    if "#" in json.name # only add a subsection
         make.pseudosection name, json.text[name]
+    else # add every section from the JSON
+        make.section name, json.text

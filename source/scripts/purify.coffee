@@ -1,3 +1,5 @@
+# this object removes unwanted text
+
 module.exports =
     sentence: (sentence) ->
         sentence
