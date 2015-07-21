@@ -2,43 +2,12 @@
 Presentador is a website that takes Wikipedia content and converts it into a presenation, all automatically. It uses the [Reveal.js](https://github.com/Hackimel/reveal.js) library to make it look like a presentation, but I created the software that inserts the data into the presentation.
 
 Presentador is the 3<sup>rd</sup> iteration of this idea, the first 2 being Instaslides and Presentr. It is by far the most advanced, with the best UI.
-
 ## Self-Hosting
-Sometimes, the website may go down. If you want to be safe, you can host it yourself. To do that, just follow these simple instructions:
-
-### Requirements
-Before you host the website, you must have the following installed:
-- CoffeeScript executor
-    - Depends on the Node.js executor
-- Git
-- Gulp
-- NPM, which is installed with Node.js
-- PM2 (optional)
-
-### Installation Process
-
-1. Download this repo
-```shell
-git clone https://github.com/AbhinavMadahar/Presentador.git
-```
-2. Go to that directory
-```
-cd Presentador
-```
-3. Install all the NPM modules needed
-```
-npm install
-```
-4. Build using Gulp
-```
-gulp
-```
-5. Start the app itself using the Coffeescript executor if you want to **test**
-```
-coffee server.coffee
-```
-6. Start the app itself using PM2 if you want to **host**
-```
+If you want to host the website yourself, first install Node.js and then run the following commands:
+```bash
+sudo npm install gulp -g # used as a build tool
+sudo npm install pm2 -g # used to execute the server file
+npm run init # installs any packages and builds the webapp
 pm2 start server.coffee
 ```
 
