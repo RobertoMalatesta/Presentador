@@ -10,5 +10,3 @@ module.exports =
         language: $ "#language"
     button:
         generate: $ "#generate"
-    video:
-        loading: $ "#loading-icon"

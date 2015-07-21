@@ -5,17 +5,6 @@ module.exports = animations =
         slide: 350
         fade: 200
 
-    loading:
-        hide: () ->
-            dom.section.loading.remove()
-            dom.section.title.children().show()
-        show: () ->
-            dom.section.title.children().hide()
-            dom.section.loading.show()
-            setTimeout () ->
-                dom.section.beenAWhile.show()
-            , 3000
-
     searchbar:
         hide: () ->
             dom.form.title.val("")
