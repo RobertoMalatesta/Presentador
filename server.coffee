@@ -4,12 +4,14 @@ socketio = require 'socket.io'
 easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
 fotology = require 'fotology'
+compression = require 'compression'
 
 app = express()
 server = http.Server app
 io = socketio.listen server
 
 app.use express.static __dirname + '/public'
+app.use compression()
 
 app.use require("./routes.coffee")
 
