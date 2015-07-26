@@ -1,6 +1,6 @@
 dom = require './dom.coffee'
 
-module.exports =
+module.exports = animations =
     speed:
         slide: 350
         fade: 200
