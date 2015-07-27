@@ -5,7 +5,6 @@ easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
 fotology = require 'fotology'
 compression = require 'compression'
-database = require './database.coffee'
 
 app = express()
 server = http.Server app
@@ -26,12 +25,9 @@ io.sockets.on 'connection', (client) ->
         io.to(client.id).emit 'new image', imageURL
 
     client.on 'get page', (page) ->
-        open = (title, language, next) ->
-            easypedia title, {language: language}, next
 
-        open page.title, page.language, (mainpage) ->
+        easypedia page.title, {language: page.language}, (mainpage) ->
             sendPage mainpage
-            database.article.save mainpage, page.language
 
             # Wikipedia has a list of the images in a page
             # because we know those images exist, we want to use them
