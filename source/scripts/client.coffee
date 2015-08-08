@@ -29,14 +29,13 @@ socket.on 'new image', (imageURL) ->
         dom.section.title.attr "data-background", imageURL
         Reveal.initialize()
 
-dom.button.generate.click () ->
-    generate()
+dom.button.generate.click generate
 
 $(document).keydown (event) ->
     if event.keyCode is 220 # backslash
         animations.searchbar.toggle()
 
-$(document).ready () ->
+$(document).ready ->
     # takes in a url and returns everything after the first /
     # extractTopics "google.com/AbhinavMadahar#Swag" -> "AbhinavMadahar#Swag"
     extractTopics = (url) ->

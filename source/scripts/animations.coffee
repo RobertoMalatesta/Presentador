@@ -6,14 +6,14 @@ module.exports = animations =
         fade: 200
 
     searchbar:
-        hide: () ->
+        hide: ->
             dom.form.title.val("")
             dom.div.inputArea.slideUp animations.speed.slide
 
-        show: () ->
+        show: ->
             dom.div.inputArea.slideDown animations.speed.slide
 
-        toggle: () ->
+        toggle: ->
             if dom.div.inputArea.css("display") is "none"
                 animations.searchbar.show()
             else
