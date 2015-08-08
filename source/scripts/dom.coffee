@@ -4,7 +4,7 @@
 module.exports =
     div:
         slides: $ ".slides"
-        inputArea: $ "#input-area"
+        input: $ "#input-area"
     section:
         title: $ "#title-section"
     form:
