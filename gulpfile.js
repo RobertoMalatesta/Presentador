@@ -48,5 +48,5 @@ gulp.task("images", function() {
 gulp.task("watch", ["default"], function() {
     gulp.watch("source/scripts/*.coffee", ["coffee"]);
     gulp.watch("source/scripts/**/*.coffee", ["coffee"]);
-    gulp.watch("source/styles/*.styl", ["styles"]);
+    gulp.watch("source/styles/*.styl", ["stylus"]);
 });
