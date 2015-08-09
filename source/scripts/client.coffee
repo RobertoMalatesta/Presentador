@@ -28,6 +28,7 @@ socket.on 'new image', (imageURL) ->
     if not dom.section.title.attr("data-background")?
         dom.section.title.attr "data-background", imageURL
         Reveal.initialize()
+        animations.title.hide()
 
 dom.button.generate.click generate
 dom.button.showMenubar.click animations.searchbar.toggle

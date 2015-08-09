@@ -3,7 +3,7 @@ dom = require './dom.coffee'
 module.exports = animations =
     speed:
         slide: 350
-        fade: 1500
+        fade: 500
 
     searchbar:
         hide: ->
@@ -20,3 +20,8 @@ module.exports = animations =
                 animations.searchbar.show()
             else
                 animations.searchbar.hide()
+
+    title:
+        hide: ->
+            dom.section.title
+                .fadeOut animations.speed.fade
