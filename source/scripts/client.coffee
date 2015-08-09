@@ -30,7 +30,13 @@ socket.on 'new image', (imageURL) ->
         Reveal.initialize()
         animations.title.hide()
 
-dom.button.generate.click generate
+# XXX: do not use dom.button.generate.click generate
+# this would result in the click event being passed to generate
+# generate excepts a title to be passed as an options first argument, not a click
+# this would throw an error and would make it impossible to use the button
+dom.button.generate.click ->
+    generate()
+
 dom.button.showMenubar.click animations.searchbar.toggle
 
 $(document).keydown (event) ->
