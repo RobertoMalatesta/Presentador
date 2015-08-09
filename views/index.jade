@@ -13,18 +13,19 @@ body
                     input#title.validate(type="text", style="color: white")
                     label(for='title') Presentation Title
                     a.waves-effect.waves-light.btn#generate Make Presentation
-                
+
                 .input-field.col.s3(style="float:right;color:white")
                     input#language.validate(type='text')
                     label(for='language') Language
 
+    a.waves-effect.waves-light.btn#show-menubar(style="display:none") Menubar
     .reveal#reveal
         .slides
             section
                 section#title-section
                     h1 Presentador
                     h2
-                        | By 
+                        | By
                         a(href="//github.com/AbhinavMadahar") Abhinav Madahar
                     p Navigate via the arrow keys
                     p

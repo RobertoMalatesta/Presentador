@@ -12,3 +12,4 @@ module.exports =
         language: $ "#language"
     button:
         generate: $ "#generate"
+        showMenubar: $ "#show-menubar"

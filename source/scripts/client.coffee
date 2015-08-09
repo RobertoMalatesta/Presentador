@@ -30,6 +30,7 @@ socket.on 'new image', (imageURL) ->
         Reveal.initialize()
 
 dom.button.generate.click generate
+dom.button.showMenubar.click animations.searchbar.toggle
 
 $(document).keydown (event) ->
     if event.keyCode is 220 # backslash
