@@ -6,7 +6,7 @@ var stylus = require('gulp-stylus');
 var minify = require('gulp-minify-css');
 var logarithmic = require('logarithmic');
 
-gulp.task("default", ["js", "coffee", "styles", "images"], function() {
+gulp.task("default", ["js", "coffee", "stylus", "images"], function() {
     // does nothing by itself
 });
 
@@ -38,10 +38,6 @@ gulp.task("stylus", function() {
         .pipe(stylus())
         .pipe(minify())
         .pipe(gulp.dest("public/styles"));
-});
-
-gulp.task("styles", ["stylus", "css"], function(){
-    // let the other functions do the work
 });
 
 gulp.task("images", function() {
