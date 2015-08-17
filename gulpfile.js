@@ -53,4 +53,6 @@ gulp.task("watch", ["default"], function() {
 
     gulp.watch("source/scripts/**/*.js", ["vendor-js"]);
     gulp.watch("source/styles/**/*.css", ["vendor-css"]);
+
+    gulp.watch("source/images/**/*", ["images"]);
 });
