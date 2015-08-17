@@ -6,15 +6,23 @@ var stylus = require('gulp-stylus');
 var minify = require('gulp-minify-css');
 var logarithmic = require('logarithmic');
 
-gulp.task("default", ["js", "coffee", "stylus", "images"], function() {
-    // does nothing by itself
-});
+gulp.task("default", ["vendor", "mine", "images"]);
 
-gulp.task("js", function() {
+gulp.task("vendor", ["vendor-js", "vendor-css"]);
+
+gulp.task("vendor-js", function() {
     gulp.src("source/scripts/*.js")
         .pipe(uglify())
         .pipe(gulp.dest("public/scripts"));
 });
+
+gulp.task("vendor-css", function() {
+    gulp.src("source/styles/*.css")
+        .pipe(minify())
+        .pipe(gulp.dest("public/styles"));
+});
+
+gulp.task("mine", ["coffee", "stylus"]);
 
 gulp.task("coffee", function () {
     gulp.src("source/scripts/client.coffee")
@@ -25,12 +33,6 @@ gulp.task("coffee", function () {
         }))
         .pipe(uglify())
         .pipe(gulp.dest("public/scripts"));
-});
-
-gulp.task("css", function() {
-    gulp.src("source/styles/*.css")
-        .pipe(minify())
-        .pipe(gulp.dest("public/styles"));
 });
 
 gulp.task("stylus", function() {
@@ -46,7 +48,9 @@ gulp.task("images", function() {
 });
 
 gulp.task("watch", ["default"], function() {
-    gulp.watch("source/scripts/*.coffee", ["coffee"]);
     gulp.watch("source/scripts/**/*.coffee", ["coffee"]);
     gulp.watch("source/styles/*.styl", ["stylus"]);
+
+    gulp.watch("source/scripts/**/*.js", ["vendor-js"]);
+    gulp.watch("source/styles/**/*.css", ["vendor-css"]);
 });
