@@ -3,6 +3,7 @@
 mongoose = require 'mongoose'
 logarithmic = require 'logarithmic'
 easypedia = require 'easypedia'
+Page = require './models/page'
 
 if process.env.VERBOSE is "FALSE"
     # hide everything except for Error messages
@@ -17,27 +18,17 @@ databaseURI = process.env.MONGO_URI || 'localhost'
 mongoose.connect databaseURI
 
 mongoose.connection.on 'error', ->
-    logarithmic.warning 'Could not connect to MongoDB. Forget to run `mongod`?'
-    logarithmic.alert "Switching over to a RAM-based database"
+    logarithmic.warning "Could not connect to MongoDB. Forget to run `mongod`?"
+    logarithmic.alert "Will make an Easypedia call every time"
+    module.exports = easypedia
 
-databaseStorage = {}
+mongoose.connection.on "open", ->
+    logarithmic.ok "Connected to Mongoose"
 
-databaseContains = (pagename, language) ->
-    databaseStorage[language]?[pagename]?
+    Page.find (error, pages) ->
+        logarithmic.alert "Current pages in the database:"
+        console.log pages.map (page) -> page.name
 
-database = (pagename, options, next) ->
-    logarithmic.alert "Now trying to open #{pagename} from the database"
-    if databaseContains pagename, options.language
-        logarithmic.ok "Found #{pagename} and calling the callback"
-        next databaseStorage[options.language][pagename]
-    else
-        logarithmic.warning "Could not find #{pagename} so calling Wikipedia"
-        easypedia pagename, options, (page) ->
-            logarithmic.ok "Got #{pagename} back from Wikipedia"
-            logarithmic.alert "Saving #{pagename} to the database"
-            if not databaseStorage[options.language]?
-                databaseStorage[options.language] = {}
-            databaseStorage[options.language][page.name] = page
-            next page
-
-module.exports = database
+    module.exports = (pagename, options, next) ->
+        Page.find {name: pagename, language: options.language}, (error, pages)->
+            console.log pages
