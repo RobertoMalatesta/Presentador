@@ -19,7 +19,6 @@ socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
-    console.log page
     dom.div.slides.append makeSection page
 
 socket.on 'new image', (imageURL) ->
