@@ -4,7 +4,7 @@ pageSchema = new mongoose.Schema
     name: String
     language: String
     links: [String]
-    text: Array
+    text: Object
 
 Page = mongoose.model "Page", pageSchema
 module.exports = Page
