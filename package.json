@@ -40,5 +40,15 @@
     "reveal": "0.0.4",
     "socket.io": "^1.3.5",
     "stylus": "^0.51.1"
+  },
+  "coffeelintConfig": {
+    "indentation" : {
+        "level" : "error",
+        "value" : 4
+    },
+    "line_endings" : {
+        "value" : "unix",
+        "level" : "error"
+    }
   }
 }
