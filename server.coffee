@@ -11,7 +11,11 @@ Page = require './models/page'
 # will use the database in the following lines
 getPage = (pagename, options, next) ->
     logarithmic.alert "Directly use Easypedia for #{pagename}"
-    easypedia pagename, options, next
+    ongoingSearches.push pagename
+    easypedia pagename, options, (page) ->
+        ongoingSearches.splice ongoingSearches.indexOf(pagename), 1
+        findOnGoingSearches()
+        next page
 
 if process.env.VERBOSE is "FALSE"
     # hide everything except for Error messages
