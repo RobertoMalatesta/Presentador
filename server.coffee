@@ -1,10 +1,10 @@
 express = require 'express'
 http = require 'http'
 socketio = require 'socket.io'
-easypedia = require 'easypedia'
 logarithmic = require 'logarithmic'
 fotology = require 'fotology'
 compression = require 'compression'
+database = require './database.coffee'
 
 app = express()
 server = http.Server app
@@ -26,7 +26,7 @@ io.sockets.on 'connection', (client) ->
 
     client.on 'get page', (page) ->
 
-        easypedia page.title, {language: page.language}, (mainpage) ->
+        database page.title, {language: page.language}, (mainpage) ->
             sendPage mainpage
 
             # Wikipedia has a list of the images in a page
@@ -46,7 +46,7 @@ io.sockets.on 'connection', (client) ->
                 mainpage.name in possible.links
 
             for link in mainpage.links.slice 0, maxLinks
-                easypedia link, {language: page.language}, (linkedPage) ->
+                database link, {language: page.language}, (linkedPage) ->
                     if isRelated linkedPage
                         sendPage linkedPage
 
