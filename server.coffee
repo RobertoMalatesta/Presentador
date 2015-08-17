@@ -39,12 +39,6 @@ mongoose.connection.on 'error', ->
 mongoose.connection.on "open", ->
     logarithmic.ok "Connected to Mongoose"
 
-    Page.find (error, pages) ->
-        logarithmic.alert "Current pages in the database:"
-        summarize = (page) ->
-            "#{page.language}: #{page.name}"
-        console.log pages.map(summarize).sort()
-
     getPage = (pagename, options, next) ->
         ongoingSearches.push pagename
 
@@ -105,7 +99,6 @@ io.sockets.on 'connection', (client) ->
     client.on 'get page', (page) ->
 
         getPage page.title, {language: page.language}, (mainpage) ->
-            console.log "Client wants #{page.title}"
             sendPage mainpage
 
             # Wikipedia has a list of the images in a page
