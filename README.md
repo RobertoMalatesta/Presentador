@@ -33,3 +33,6 @@ It will work for:
 That said, IE8 will only have the slides in 1 long, scrollable page. IE9 and Firefox 3.6 and lower will not have animations.
 
 Does not work on your platform? Make a new issue on GitHub.
+
+# Credits
+Icon made by [Freepik](http://www.freepik.com" title="Freepik) from [www.flaticon.com](http://www.flaticon.com" title="Flaticon) is licensed under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0)
