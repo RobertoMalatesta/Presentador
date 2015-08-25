@@ -41,9 +41,16 @@ mongoose.connection.on "open", ->
         Page.findOne searchQuery, (error, databasePage)->
             if not databasePage
                 logarithmic.alert "#{pagename} is not in the database"
+                pageexists = false
+                setTimeout ->
+                    if not pageexists
+                        logarithmic.alert "#{pagename} does not exist"
+                        next undefined
+                , 3000
+
                 easypedia pagename, options, (page) ->
+                    pageexists = true
                     logarithmic.ok "Found #{pagename} from the Wikipedia API"
-                    next page
                     pageEntry =
                         name: page.name
                         # the database matches the search terms to the pages
@@ -51,11 +58,12 @@ mongoose.connection.on "open", ->
                         language: options.language
                         links: page.links
                         text: page.text
+                    next pageEntry
                     Page.create pageEntry, (error, newpage) ->
                         if error
                             logarithmic.warning error
                         else
-                            logarithmic.ok "Saved #{pagename} to the database"
+                            logarithmic.ok "Saved #{pagename} to the DB"
 
             else # if the page is in the database
                 logarithmic.ok "Found the entry for #{pagename} in the database"
@@ -119,6 +127,13 @@ io.sockets.on 'connection', (client) ->
     client.on 'get page', (page) ->
 
         getPage page.title, {language: page.language}, (mainpage) ->
+            if not mainpage?
+                logarithmic.alert "#{page.title} could not be found"
+                sendPage
+                    title: page.title
+                    exists: false
+                return
+
             sendPage mainpage
             getImage page.title, {}, sendImage
 
@@ -134,6 +149,8 @@ io.sockets.on 'connection', (client) ->
                 language: page.language
 
             isRelated = (possible) ->
+                if not possible?
+                    return false
                 mainpage.name in possible.links
 
             for link in mainpage.links.slice 0, maxLinks
