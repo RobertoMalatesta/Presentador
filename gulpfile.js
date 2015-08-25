@@ -31,7 +31,7 @@ gulp.task("coffee", function () {
             transform: ["coffeeify"],
             extensions: ['.coffee']
         }))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest("public/scripts"));
 });
 
