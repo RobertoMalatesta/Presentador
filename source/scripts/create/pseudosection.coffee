@@ -47,6 +47,7 @@ module.exports = (title, section) ->
         "<section id='#{id}' class='stack future'>
             <section>
                 <h1>#{title}</h1>
+                <img id='img-#{id}' />
             </section>"
         # keep the top section open so we can add slides into it
 
