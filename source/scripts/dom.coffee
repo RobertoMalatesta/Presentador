@@ -12,4 +12,7 @@ module.exports =
         language: $ "#language"
     button:
         generate: $ "#generate"
-        showMenubar: $ "#show-menubar"
+        fullscreen: $ "#fullscreen"
+        hide: $ "#hide"
+        print: $ "print"
+        show: $ "#show"

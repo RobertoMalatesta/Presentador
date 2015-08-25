@@ -9,11 +9,11 @@ module.exports = animations =
         hide: ->
             dom.form.title.val("")
             dom.div.input.slideUp animations.speed.slide
-            dom.button.showMenubar.slideDown animations.speed.slide
+            dom.button.show.show()
 
         show: ->
             dom.div.input.slideDown animations.speed.slide
-            dom.button.showMenubar.slideUp animations.speed.slide
+            dom.button.show.hide()
 
         toggle: ->
             if dom.div.input.css("display") is "none"

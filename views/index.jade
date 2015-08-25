@@ -9,18 +9,25 @@ head
 
 body
     .row#input-area
-        form.col.s12
-            .row
-                .input-field.col.s6
-                    input#title.validate(type="text", style="color: white")
-                    label(for='title') Presentation Title
-                    a.waves-effect.waves-light.btn#generate Make Presentation
+        form
+            .input-field.col.s5
+                input#title.validate(type="text", style="color: white")
+                label(for='title') Presentation Title
 
-                .input-field.col.s3(style="float:right;color:white")
-                    input#language.validate(type='text')
-                    label(for='language') Language
+            .input-field.col.s3(style="color:white")
+                input#language.validate(type='text')
+                label(for='language') Language
+            
+            .input-field.col.s1(style="color:white")
+                a.waves-effect.waves-light.btn#generate Add Slides
+            .input-field.col.s1(style="color:white")
+                a.waves-effect.waves-light.btn#fullscreen Full
+            .input-field.col.s1(style="color:white")
+                a.waves-effect.waves-light.btn#clear Clear
+            .input-field.col.s1(style="color:white")
+                a.waves-effect.waves-light.btn#hide Hide
 
-    a.waves-effect.waves-light.btn#show-menubar(style="display:none") Menubar
+    a.waves-effect.waves-light.btn#show(style="display:none;float:right") Show
     .reveal#reveal
         .slides
             section

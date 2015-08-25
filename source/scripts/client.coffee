@@ -32,7 +32,8 @@ socket.on 'new image', make.image
 dom.button.generate.click ->
     generate()
 
-dom.button.showMenubar.click animations.searchbar.toggle
+dom.button.hide.click animations.searchbar.toggle
+dom.button.show.click animations.searchbar.toggle
 
 $(document).keydown (event) ->
     if event.keyCode is 220 # backslash
