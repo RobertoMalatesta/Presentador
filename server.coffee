@@ -19,9 +19,7 @@ if process.env.VERBOSE is "FALSE"
         error: logarithmic.error
 
 # will use the database in the following lines
-getPage = (pagename, options, next) ->
-    logarithmic.alert "Directly using Easypedia for #{pagename}"
-    easypedia pagename, options, next
+getPage = easypedia
 
 logarithmic.alert "Trying to connect to the database"
 mongoose.connect databaseURI
