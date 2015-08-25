@@ -3,5 +3,6 @@ make =
 
 module.exports = (image) ->
     id = make.id image.name
-    section = document.getElementById "img-#{id}"
-    section.src = image.url
+    imageNode = document.getElementById "img-#{id}"
+    imageNode.src = image.url
+    return
