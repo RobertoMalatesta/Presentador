@@ -32,7 +32,7 @@ socket.on 'new image', (imageURL) ->
 
 # XXX: do not use dom.button.generate.click generate
 # this would result in the click event being passed to generate
-# generate excepts a title to be passed as an options first argument, not a click
+# generate accepts a title to be passed as an option's 1st argument, not a click
 # this would throw an error and would make it impossible to use the button
 dom.button.generate.click ->
     generate()
