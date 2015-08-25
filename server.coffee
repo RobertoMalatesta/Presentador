@@ -8,14 +8,7 @@ mongoose = require 'mongoose' # please don't kill me, /r/programming
 easypedia = require 'easypedia'
 Page = require './models/page'
 
-# will use the database in the following lines
-getPage = (pagename, options, next) ->
-    logarithmic.alert "Directly use Easypedia for #{pagename}"
-    ongoingSearches.push pagename
-    easypedia pagename, options, (page) ->
-        ongoingSearches.splice ongoingSearches.indexOf(pagename), 1
-        findOnGoingSearches()
-        next page
+databaseURI = process.env.MONGO_URI || 'localhost'
 
 if process.env.VERBOSE is "FALSE"
     # hide everything except for Error messages
@@ -25,16 +18,13 @@ if process.env.VERBOSE is "FALSE"
         warning: () -> null
         error: logarithmic.error
 
-databaseURI = process.env.MONGO_URI || 'localhost'
+# will use the database in the following lines
+getPage = (pagename, options, next) ->
+    logarithmic.alert "Directly using Easypedia for #{pagename}"
+    easypedia pagename, options, next
 
 logarithmic.alert "Trying to connect to the database"
 mongoose.connect databaseURI
-
-ongoingSearches = []
-findOnGoingSearches = ->
-    logarithmic.alert "#{ongoingSearches.length} ongoing searches"
-    if ongoingSearches.length
-        logarithmic.alert ongoingSearches.sort()
 
 mongoose.connection.on 'error', ->
     logarithmic.warning "Could not connect to MongoDB. Forget to run `mongod`?"
@@ -44,8 +34,6 @@ mongoose.connection.on "open", ->
     logarithmic.ok "Connected to Mongoose"
 
     getPage = (pagename, options, next) ->
-        ongoingSearches.push pagename
-
         logarithmic.alert "Looking in the database for #{pagename}"
         searchQuery =
             name: pagename
@@ -56,8 +44,6 @@ mongoose.connection.on "open", ->
                 easypedia pagename, options, (page) ->
                     logarithmic.ok "Found #{pagename} from the Wikipedia API"
                     next page
-                    ongoingSearches.splice(ongoingSearches.indexOf(pagename), 1)
-                    findOnGoingSearches()
                     pageEntry =
                         name: page.name
                         # the database matches the search terms to the pages
@@ -74,13 +60,11 @@ mongoose.connection.on "open", ->
             else # if the page is in the database
                 logarithmic.ok "Found the entry for #{pagename} in the database"
 
-                findOnGoingSearches()
                 next
                     name: databasePage.name
                     language: databasePage.language
                     text: databasePage.text
                     links: databasePage.links
-                ongoingSearches.splice(ongoingSearches.indexOf(pagename), 1)
 
 app = express()
 server = http.Server app
@@ -122,7 +106,6 @@ io.sockets.on 'connection', (client) ->
                 mainpage.name in possible.links
 
             for link in mainpage.links.slice 0, maxLinks
-                findOnGoingSearches()
                 getPage link, {language: page.language}, (linkedPage) ->
                     if isRelated linkedPage
                         sendPage linkedPage
