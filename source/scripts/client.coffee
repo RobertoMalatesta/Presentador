@@ -9,7 +9,9 @@ so this is the only file that can manage client socketing
 Most of the actual work and complexity resides in other files
 ###
 
-makeSection = require './make.coffee'
+make =
+    section: require './make.coffee'
+    image: require './create/image.coffee'
 animations = require "./animations.coffee"
 dom = require './dom.coffee'
 
@@ -19,16 +21,9 @@ socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
-    dom.div.slides.append makeSection page
+    dom.div.slides.append make.section page
 
-socket.on 'new image', (imageURL) ->
-    # to change the background image of a slide, Reveal has to restart
-    # thus, it only restarts once at the start of the presentation
-    # that way, the screen doesn't reset whenever another section is added
-    if not dom.section.title.attr("data-background")?
-        dom.section.title.attr "data-background", imageURL
-        Reveal.initialize()
-        animations.title.hide()
+socket.on 'new image', make.image
 
 # XXX: do not use dom.button.generate.click generate
 # this would result in the click event being passed to generate

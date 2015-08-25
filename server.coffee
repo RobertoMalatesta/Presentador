@@ -7,6 +7,7 @@ compression = require 'compression'
 mongoose = require 'mongoose' # please don't kill me, /r/programming
 easypedia = require 'easypedia'
 Page = require './models/page'
+Image = require './models/image'
 
 databaseURI = process.env.MONGO_URI || 'localhost'
 
@@ -20,6 +21,7 @@ if process.env.VERBOSE is "FALSE"
 
 # will use the database in the following lines
 getPage = easypedia
+getImage = fotology
 
 logarithmic.alert "Trying to connect to the database"
 mongoose.connect databaseURI
@@ -64,6 +66,38 @@ mongoose.connection.on "open", ->
                     text: databasePage.text
                     links: databasePage.links
 
+    getImage = (imagename, options, next) ->
+        imagename = imagename.toLowerCase()
+        logarithmic.alert "Looking in the database for #{imagename}"
+        searchQuery =
+            name: imagename
+            language: options.language
+        Image.findOne searchQuery, (error, databaseImage)->
+            if not databaseImage
+                logarithmic.alert "#{imagename} is not in the database"
+                fotology imagename, options, (images) ->
+                    logarithmic.ok "Found #{imagename} from the Google API"
+                    imageEntry =
+                        name: imagename
+                        # the database matches the search terms to the pages
+                        # thus, it uses the search lang, not the page lang
+                        language: options.language
+                        url: images[0]
+                    next imageEntry
+                    Image.create imageEntry, (error, newimage) ->
+                        if error
+                            logarithmic.warning error
+                        else
+                            logarithmic.ok "Saved #{imagename} to the database"
+
+            else # if the page is in the database
+                logarithmic.ok "Found the entry for #{imagename} in the DB"
+
+                next
+                    name: databaseImage.name
+                    language: options.language
+                    url: databaseImage.url
+
 app = express()
 server = http.Server app
 io = socketio.listen server
@@ -79,13 +113,14 @@ io.sockets.on 'connection', (client) ->
     sendPage = (page) ->
         io.to(client.id).emit 'new page', page
 
-    sendImage = (imageURL) ->
-        io.to(client.id).emit 'new image', imageURL
+    sendImage = (image) ->
+        io.to(client.id).emit 'new image', image
 
     client.on 'get page', (page) ->
 
         getPage page.title, {language: page.language}, (mainpage) ->
             sendPage mainpage
+            getImage page.title, {}, sendImage
 
             # Wikipedia has a list of the images in a page
             # because we know those images exist, we want to use them
@@ -97,8 +132,6 @@ io.sockets.on 'connection', (client) ->
                 size: "large"
                 safe: true
                 language: page.language
-            fotology imageSearchTerm, options, (imageURLs) ->
-                sendImage imageURLs[0]
 
             isRelated = (possible) ->
                 mainpage.name in possible.links
@@ -107,6 +140,7 @@ io.sockets.on 'connection', (client) ->
                 getPage link, {language: page.language}, (linkedPage) ->
                     if isRelated linkedPage
                         sendPage linkedPage
+                        getImage linkedPage.name, {}, sendImage
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
