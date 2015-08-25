@@ -32,16 +32,4 @@ module.exports = animations =
     body:
         fullscreen:
             enable: ->
-                document.body.webkitRequestFullScreen.apply(document.body)
-                state.fullscreen = true
-
-            disable: ->
-                document.webkitCancelFullScreen() or
-                document.mozCancelFullScreen() or
-                document.cancelFullScreen()
-
-            toggle: ->
-                if state.fullscreen
-                    animations.body.fullscreen.disable()
-                else
-                    animations.body.fullscreen.enable()
+                document.body.webkitRequestFullScreen.apply document.body
