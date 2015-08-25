@@ -83,6 +83,7 @@ mongoose.connection.on "open", ->
         Image.findOne searchQuery, (error, databaseImage)->
             if not databaseImage
                 logarithmic.alert "#{imagename} is not in the database"
+                options.size = "medium"
                 fotology imagename, options, (images) ->
                     logarithmic.ok "Found #{imagename} from the Google API"
                     imageEntry =
