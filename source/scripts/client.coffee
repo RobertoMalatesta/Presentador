@@ -14,6 +14,7 @@ make =
     image: require './create/image.coffee'
 animations = require "./animations.coffee"
 dom = require './dom.coffee'
+clear = require './clear.coffee'
 
 # connect to the server via a websocket
 # then tell the generate function where to send the "new page" requests
@@ -36,6 +37,8 @@ dom.button.hide.click animations.searchbar.toggle
 dom.button.show.click animations.searchbar.toggle
 
 dom.button.fullscreen.click animations.body.fullscreen.enable
+
+dom.button.clear.click clear
 
 $(document).keydown (event) ->
     if event.keyCode is 220 # backslash

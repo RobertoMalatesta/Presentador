@@ -14,5 +14,5 @@ module.exports =
         generate: $ "#generate"
         fullscreen: $ "#fullscreen"
         hide: $ "#hide"
-        print: $ "print"
+        clear: $ "#clear"
         show: $ "#show"
