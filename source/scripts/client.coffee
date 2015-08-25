@@ -35,6 +35,8 @@ dom.button.generate.click ->
 dom.button.hide.click animations.searchbar.toggle
 dom.button.show.click animations.searchbar.toggle
 
+dom.button.fullscreen.click animations.body.fullscreen.toggle
+
 $(document).keydown (event) ->
     if event.keyCode is 220 # backslash
         animations.searchbar.toggle()

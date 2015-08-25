@@ -1,5 +1,8 @@
 dom = require './dom.coffee'
 
+state =
+    fullscreen: false
+
 module.exports = animations =
     speed:
         slide: 350
@@ -25,3 +28,20 @@ module.exports = animations =
         hide: ->
             dom.section.title
                 .fadeOut animations.speed.fade
+
+    body:
+        fullscreen:
+            enable: ->
+                document.body.webkitRequestFullScreen.apply(document.body)
+                state.fullscreen = true
+
+            disable: ->
+                document.webkitCancelFullScreen() or
+                document.mozCancelFullScreen() or
+                document.cancelFullScreen()
+
+            toggle: ->
+                if state.fullscreen
+                    animations.body.fullscreen.disable()
+                else
+                    animations.body.fullscreen.enable()
