@@ -1,9 +1,9 @@
 # this function defines how to generate a presentation
 # it takes in a socket where it can latch to
 
+langify = require 'langify'
 dom = require './dom.coffee'
 animations = require './animations.coffee'
-language = require './language.coffee'
 
 getTitle = -> dom.form.title.val()
 
@@ -15,8 +15,17 @@ isUsable = (title) -> title.replace(/ /g, "") isnt ""
 # the returned function is latched to the socket
 module.exports = (socket) ->
     (title = getTitle()) ->
+        language = dom.form.language.val()
+        languageCode = langify language
+
+        if not languageCode?
+            Materialize.toast "#{language} is not a valid language", 4000
+            return
+        else 
+            console.log languageCode
+
         if isUsable title
             animations.searchbar.hide()
             socket.emit "get page",
                 title: title
-                language: language()
+                language: language
