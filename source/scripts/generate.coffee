@@ -18,7 +18,10 @@ module.exports = (socket) ->
         language = dom.form.language.val()
         languageCode = langify language
 
-        if not languageCode?
+        if language is ""
+            languageCode = "en"
+
+        else if language? and not languageCode? # if a bad language was given
             Materialize.toast "#{language} is not a valid language", 4000
             return
 
