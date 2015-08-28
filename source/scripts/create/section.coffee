@@ -7,7 +7,17 @@ make =
     slide: require "./slide.coffee"
     id: require "./id.coffee"
 
-module.exports = (title, sections) ->
+module.exports = (title, sectionsMap) ->
+    # we need to go thru the sections in order, but a Map has no implicit order
+    # thus, we need to turn it into an array of objects
+    sections = []
+    for heading, content of sectionsMap
+        sections.push
+            heading: heading
+            content: content
+    if sections[0].heading isnt "Intro"
+        sections = sections.reverse()
+
     id = make.id title
 
     sectionsHTML =
@@ -21,8 +31,8 @@ module.exports = (title, sections) ->
             # keep the top section open so we can add slides into it
 
     # insert the slides
-    for heading, content of sections
-        sectionsHTML += make.slide(heading, content) or ""
+    for section in sections
+        sectionsHTML += make.slide(section.heading, section.content) or ""
 
     # close the top section
     sectionsHTML += "</section>"
