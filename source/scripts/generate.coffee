@@ -21,8 +21,6 @@ module.exports = (socket) ->
         if not languageCode?
             Materialize.toast "#{language} is not a valid language", 4000
             return
-        else 
-            console.log languageCode
 
         if isUsable title
             animations.searchbar.hide()
