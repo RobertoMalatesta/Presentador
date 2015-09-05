@@ -4,9 +4,9 @@
 range = require "./range.coffee"
 purify = require '../purify.coffee'
 
-module.exports = (heading, content) ->
+module.exports = (section) ->
   # we only care about the text, not the links
-  sentences = content.map (sentence) -> sentence.text
+  sentences = section.content.map (sentence) -> sentence.text
 
   # XXX: relies on the state of slideText so is not fully-functional
   enoughSpace = (sentence) ->
@@ -23,7 +23,4 @@ module.exports = (heading, content) ->
       break # it cannot handle any more sentences, so stop
 
   if slideText.length >= range.slide.min
-    "<section>
-      <h2>#{heading}</h2>
-      <p>#{slideText}</p>
-    </section>"
+    "<section><h2>#{section.title}</h2><p>#{slideText}</p></section>"

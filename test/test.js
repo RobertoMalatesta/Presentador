@@ -47,3 +47,33 @@ describe("name", function() {
     }
   });
 });
+
+describe("slide", function() {
+  it("converts a section from Easypedia to a slide", function() {
+    var mock = {
+      title: "Intro",
+      content: [
+        {text: "France, officially the French Republic is a sovereign state comprising territory in western Europe and several overseas regions and territories."},
+        {text: "It is a unitary semi-presidential republic."},
+        {text: "The capital of France is Paris, the country\'s largest city and the main cultural and commercial center."},
+        {text: "The Constitution of France establishes the state as secular and democratic, with its sovereignty derived from the people."},
+        {text: "During the Iron Age, what is now Metropolitan France was inhabited by the Gauls, a Celtic people."},
+        {text: "The Gauls were conquered by the Roman Empire in 51 BC, which held Gaul until 486."}
+      ]
+    };
+
+    var paragraph = mock.content[0].text + " " + mock.content[1].text + " " + mock.content[2].text + " " + mock.content[3].text;
+    expect(slide(mock)).to.equal("<section><h2>" + mock.title + "</h2><p>" + paragraph + " </p></section>");
+  });
+
+  it("ignores very small sections", function() {
+    var mock = {
+      title: "Intro",
+      content: [
+        {text: "France, officially the French Republic is a sovereign state comprising territory in western Europe and several overseas regions and territories."},
+      ]
+    };
+
+    expect(slide(mock)).to.equal(undefined);
+  });
+});
