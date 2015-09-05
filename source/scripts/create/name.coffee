@@ -7,22 +7,22 @@ it will use the subsection's name
 ###
 
 isSubtitle = (name) ->
-    "#" in name
+  "#" in name
 
 from =
-    subtitle: (name) ->
-        # the hash separates the title and subtitle
-        # to get the subtitle, find everything after the hash
-        # after we get the subtitle, we can treat it as a normal title
+  subtitle: (name) ->
+    # the hash separates the title and subtitle
+    # to get the subtitle, find everything after the hash
+    # after we get the subtitle, we can treat it as a normal title
 
-        startingPoint = name.indexOf("#") + 1
-        from.title name.substring startingPoint
+    startingPoint = name.indexOf("#") + 1
+    from.title name.substring startingPoint
 
-    title: (name) ->
-        name.replace(/_/g, " ")
+  title: (name) ->
+    name.replace(/_/g, " ")
 
 module.exports = (name) ->
-    if isSubtitle name
-        from.subtitle name
-    else
-        from.title name
+  if isSubtitle name
+    from.subtitle name
+  else
+    from.title name

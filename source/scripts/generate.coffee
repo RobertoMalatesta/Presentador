@@ -14,19 +14,19 @@ isUsable = (title) -> title.replace(/ /g, "") isnt ""
 # the advantage is that module.exports gets a socket
 # the returned function is latched to the socket
 module.exports = (socket) ->
-    (title = getTitle()) ->
-        language = dom.form.language.val()
-        languageCode = langify language
+  (title = getTitle()) ->
+    language = dom.form.language.val()
+    languageCode = langify language
 
-        if language is ""
-            languageCode = "en"
+    if language is ""
+      languageCode = "en"
 
-        else if language? and not languageCode? # if a bad language was given
-            Materialize.toast "#{language} is not a valid language", 4000
-            return
+    else if language? and not languageCode? # if a bad language was given
+      Materialize.toast "#{language} is not a valid language", 4000
+      return
 
-        if isUsable title
-            animations.searchbar.hide()
-            socket.emit "get page",
-                title: title
-                language: language
+    if isUsable title
+      animations.searchbar.hide()
+      socket.emit "get page",
+        title: title
+        language: language
