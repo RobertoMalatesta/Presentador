@@ -24,7 +24,7 @@ pseudoslides = (sentences) ->
   # XXX: relies on the state of `slides` and is not purely-functional
   restart = ->
     slides.push currentSlide
-    currentSlide = sentence
+    currentSlide = sentence + " "
 
   for sentence in sentences
     if shouldRestart sentence
@@ -35,18 +35,18 @@ pseudoslides = (sentences) ->
   slides
 
 # this creates the HTML that will be inserted
-module.exports = (title, section) ->
+module.exports = (section) ->
   # this just inserts the slides into an HTML-string
   # the actual generation of the slides is done by pseudoslides
 
   # we don't need the links right now, so extract the text
-  sentences = section.map (sentence) -> sentence.text
-  id = make.id title
+  sentences = section.content.map (sentence) -> sentence.text
+  id = make.id section.title
 
   sectionHTML =
     "<section id='#{id}' class='stack future'>
       <section>
-        <h1>#{title}</h1>
+        <h1>#{section.title}</h1>
         <img id='img-#{id}' />
       </section>"
     # keep the top section open so we can add slides into it

@@ -88,3 +88,24 @@ describe("slide", function() {
     expect(slide(mock)).to.equal(undefined);
   });
 });
+
+describe("section", function() {
+  it("creates a section by combining slides", function() {
+    var mock = require("./examples/France.json");
+    expect(section(mock)).to.not.equal(undefined);
+  });
+
+  it("avoids making short slides", function() {
+    var mock = {
+      name: "Shorty",
+      sections: [{
+        title: "Intro",
+        content: [{
+          text: "Hello"
+        }]
+      }]
+    };
+    var expected = '<section id=\'Shorty\' class=\'stack future\'> <section> <h1>Shorty</h1> </section> <section> <img id=\'img-Shorty\' /> </section>undefined</section>';
+    expect(section(mock)).to.equal(expected);
+  });
+});
