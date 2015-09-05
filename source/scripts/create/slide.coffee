@@ -11,7 +11,7 @@ module.exports = (section) ->
   slideText = ""
   for sentence in sentences
     if sentence.length + slideText.length <= range.slide.max
-      slideText += purify.sentence(sentence) + " "
+      slideText += purify(sentence) + " "
     else
       break # it cannot handle any more sentences, so stop
 

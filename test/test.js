@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var id = require('../source/scripts/create/id.coffee');
 var name = require('../source/scripts/create/name.coffee');
+var purify = require('../source/scripts/purify.coffee');
 var slide = require('../source/scripts/create/slide.coffee');
 var section = require('../source/scripts/create/section.coffee');
 var range = require('../source/scripts/create/range.coffee');
@@ -47,6 +48,24 @@ describe("name", function() {
       var mock = mocks[i];
       expect(name(mock.original)).to.equal(mock.final);
     }
+  });
+});
+
+describe("purify", function() {
+  it("trims whitespace", function() {
+    expect(purify(" the dog ")).to.equal("the dog");
+  });
+
+  it("removes content inside ()", function() {
+    expect(purify("hello (useless) how are you")).to.equal("hello how are you");
+  });
+
+  it("removes content inside []", function() {
+    expect(purify("hello [useless] how are you")).to.equal("hello how are you");
+  });
+
+  it("removes content inside {}", function() {
+    expect(purify("hello {useless} how are you")).to.equal("hello how are you");
   });
 });
 
