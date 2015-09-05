@@ -22,10 +22,11 @@ socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
-  if page.exists? and page.exists is false
-    Materialize.toast "Could not find #{page.title}", 4000
-  else
-    dom.div.slides.append make.section page
+  console.log page
+  dom.div.slides.append make.section page
+socket.on 'new error', (error) ->
+  console.log error
+  Materialize.toast error.message, 4000
 
 socket.on 'new image', make.image
 

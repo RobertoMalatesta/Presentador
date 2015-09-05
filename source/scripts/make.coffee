@@ -15,10 +15,10 @@ make =
   pseudosection: require "./create/pseudosection.coffee"
   section: require "./create/section.coffee"
 
-module.exports = (json) ->
+module.exports = (page) ->
   # set up the variables that will be used
-  id = make.id json.name
-  name = make.name json.name
+  id = make.id page.name
+  name = make.name page.name
 
   # if the section is already added, don't readd it
   if document.getElementById(id)?
@@ -26,7 +26,7 @@ module.exports = (json) ->
 
   # hash separates the title and subtitle
   # if there is a hash, it means that only part should be added
-  if "#" in json.name # only add a subsection
-    make.pseudosection name, json.text[name]
+  if "#" in page.name # only add a subsection
+    make.pseudosection page
   else # add every section from the JSON
-    make.section name, json.text
+    make.section page

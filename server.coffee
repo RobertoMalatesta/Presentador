@@ -6,6 +6,7 @@ fotology = require 'fotology'
 compression = require 'compression'
 mongoose = require 'mongoose' # please don't kill me, /r/programming
 easypedia = require 'easypedia'
+langify = require 'langify'
 Page = require './models/page'
 Image = require './models/image'
 
@@ -34,44 +35,37 @@ mongoose.connection.on "open", ->
   logarithmic.ok "Connected to Mongoose"
 
   getPage = (pagename, options, next) ->
-    logarithmic.alert "Looking in the database for #{pagename}"
+    options.language = options.language or "English"
     searchQuery =
       name: pagename
       language: langify options.language
-    Page.findOne searchQuery, (error, databasePage)->
-      if not databasePage
+    logarithmic.alert "Looking for #{pagename} in the #{options.language} DB"
+    Page.findOne searchQuery, (finderror, databasePage)->
+      if finderror
+        logarithmic.warning finderror
+      else if not databasePage?
         logarithmic.alert "#{pagename} is not in the #{options.language} DB"
-        pageexists = false
-        setTimeout ->
-          if not pageexists
-            logarithmic.alert "#{pagename} does not exist"
-            next undefined
-        , 3000
-
-        easypedia pagename, options, (page) ->
-          pageexists = true
-          logarithmic.ok "Found #{pagename} from the Wikipedia API"
-          pageEntry =
-            name: page.name
-            # the database matches the search terms to the pages
-            # thus, it uses the search lang, not the page lang
-            language: options.language
-            links: page.links
-            text: page.text
-          next pageEntry
-          Page.create pageEntry, (error, newpage) ->
-            if error
-              logarithmic.warning error
-            else
-              logarithmic.ok "Saved #{pagename} to the DB"
+        easypedia pagename, options, (easypediaerror, page) ->
+          next easypediaerror, pageEntry
+          if easypediaerror
+            logarithmic.warning easypediaerror
+          else
+            pageEntry =
+              name: page.name
+              # the database matches the search terms to the pages
+              # thus, it uses the search lang, not the page lang
+              language: options.language
+              links: page.links
+              sections: page.sections
+            Page.create pageEntry, (createerror) ->
+              logarithmic.warning createerror if createerror
 
       else # if the page is in the database
-        logarithmic.ok "Found the entry for #{pagename} in the database"
-
-        next
+        logarithmic.ok "Found #{pagename} in the #{options.language} DB"
+        next finderror,
           name: databasePage.name
           language: langify databasePage.language
-          text: databasePage.text
+          sections: databasePage.sections
           links: databasePage.links
 
   getImage = (imagename, options, next) ->
@@ -125,14 +119,20 @@ io.sockets.on 'connection', (client) ->
   sendImage = (image) ->
     io.to(client.id).emit 'new image', image
 
+  sendError = (image) ->
+    io.to(client.id).emit 'new error', image
+
   client.on 'get page', (page) ->
 
-    getPage page.title, {language: page.language}, (mainpage) ->
-      if not mainpage?
-        logarithmic.alert "#{page.title} could not be found"
-        sendPage
-          title: page.title
-          exists: false
+    getPage page.title, {language: page.language}, (error, mainpage) ->
+      if error?
+        console.log error
+        sendError error
+        return
+
+      else
+        logarithmic.ok "Sending #{page.title} in #{page.language} to the client"
+        sendPage mainpage
         return
 
       sendPage mainpage
@@ -155,10 +155,16 @@ io.sockets.on 'connection', (client) ->
         mainpage.name in possible.links
 
       for link in mainpage.links.slice 0, maxLinks
-        getPage link, {language: page.language}, (linkedPage) ->
-          if isRelated linkedPage
+        getPage link, {language: page.language}, (error, linkedPage) ->
+          if error
+            sendError error
+          else if isRelated linkedPage
             sendPage linkedPage
-            getImage linkedPage.name, {}, sendImage
+            getImage linkedPage.name, {}, (error, page) ->
+              if error
+                sendError error
+              else
+                sendImage page
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'

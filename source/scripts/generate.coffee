@@ -29,4 +29,4 @@ module.exports = (socket) ->
       animations.searchbar.hide()
       socket.emit "get page",
         title: title
-        language: language
+        language: languageCode
