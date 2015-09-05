@@ -22,7 +22,7 @@ module.exports = (article) ->
 
   # insert the slides
   for section in article.sections
-    sectionsHTML += make.slide section
+    sectionsHTML += (make.slide section) or ""
 
   # close the top section
   sectionsHTML += "</section>"
