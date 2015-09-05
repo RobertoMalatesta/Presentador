@@ -8,18 +8,11 @@ module.exports = (section) ->
   # we only care about the text, not the links
   sentences = section.content.map (sentence) -> sentence.text
 
-  # XXX: relies on the state of slideText so is not fully-functional
-  enoughSpace = (sentence) ->
-    sentence.length + slideText.length <= range.slide.max
-
-  goodLength = (sentence) ->
-    range.sentence.min <= sentence.length
-
   slideText = ""
   for sentence in sentences
-    if enoughSpace(sentence) and goodLength(sentence)
+    if sentence.length + slideText.length <= range.slide.max
       slideText += purify.sentence(sentence) + " "
-    else if not enoughSpace sentence
+    else
       break # it cannot handle any more sentences, so stop
 
   if slideText.length >= range.slide.min

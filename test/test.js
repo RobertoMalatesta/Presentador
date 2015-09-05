@@ -2,6 +2,8 @@ var expect = require('chai').expect;
 var id = require('../source/scripts/create/id.coffee');
 var name = require('../source/scripts/create/name.coffee');
 var slide = require('../source/scripts/create/slide.coffee');
+var section = require('../source/scripts/create/section.coffee');
+var range = require('../source/scripts/create/range.coffee');
 
 describe("id", function() {
   it("converts the name of a Wikipedia to an HTML-valid ID", function() {
@@ -50,20 +52,10 @@ describe("name", function() {
 
 describe("slide", function() {
   it("converts a section from Easypedia to a slide", function() {
-    var mock = {
-      title: "Intro",
-      content: [
-        {text: "France, officially the French Republic is a sovereign state comprising territory in western Europe and several overseas regions and territories."},
-        {text: "It is a unitary semi-presidential republic."},
-        {text: "The capital of France is Paris, the country\'s largest city and the main cultural and commercial center."},
-        {text: "The Constitution of France establishes the state as secular and democratic, with its sovereignty derived from the people."},
-        {text: "During the Iron Age, what is now Metropolitan France was inhabited by the Gauls, a Celtic people."},
-        {text: "The Gauls were conquered by the Roman Empire in 51 BC, which held Gaul until 486."}
-      ]
-    };
+    var mock = require("./examples/France.json").sections[0];
 
-    var paragraph = mock.content[0].text + " " + mock.content[1].text + " " + mock.content[2].text + " " + mock.content[3].text;
-    expect(slide(mock)).to.equal("<section><h2>" + mock.title + "</h2><p>" + paragraph + " </p></section>");
+    var expected = "<section><h2>Intro</h2><p>France, officially the French Republic a sovereign state comprising territory in western Europe and several overseas regions and territories. The European part of France, called Metropolitan France, extends from the Mediterranean Sea to the English Channel and the North Sea, and from the Rhine to the Atlantic Ocean; France covers 640679 km2 and has a population of 66.6 million. It is a unitary semi-presidential republic. </p></section>";
+    expect(slide(mock)).to.equal(expected);
   });
 
   it("ignores very small sections", function() {

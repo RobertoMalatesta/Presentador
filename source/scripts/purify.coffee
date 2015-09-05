@@ -3,5 +3,5 @@
 module.exports =
   sentence: (sentence) ->
     sentence
-      .replace /\s*/, "" # strip starting whitespace
+      .trim()
       .replace /\s\(.*?\)/g, "" # remove everything inside (...)
