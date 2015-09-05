@@ -37,10 +37,10 @@ mongoose.connection.on "open", ->
     logarithmic.alert "Looking in the database for #{pagename}"
     searchQuery =
       name: pagename
-      language: options.language
+      language: langify options.language
     Page.findOne searchQuery, (error, databasePage)->
       if not databasePage
-        logarithmic.alert "#{pagename} is not in the database"
+        logarithmic.alert "#{pagename} is not in the #{options.language} DB"
         pageexists = false
         setTimeout ->
           if not pageexists
@@ -70,7 +70,7 @@ mongoose.connection.on "open", ->
 
         next
           name: databasePage.name
-          language: databasePage.language
+          language: langify databasePage.language
           text: databasePage.text
           links: databasePage.links
 

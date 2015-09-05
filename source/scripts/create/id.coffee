@@ -13,6 +13,5 @@ module.exports = (name) ->
   name
     .replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g, "") # remove punctuation
     .replace(/\s{2,}/g,"") # clean any text broken from removing punctuation
-    .replace(/ /g, "") # remove spaces
+    .replace(/ /g, "-") # remove spaces
     .replace(/'/g, "") # remove apostrophes
-    .toLowerCase()

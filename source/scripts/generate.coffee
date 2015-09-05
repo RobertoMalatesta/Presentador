@@ -15,13 +15,13 @@ isUsable = (title) -> title.replace(/ /g, "") isnt ""
 # the returned function is latched to the socket
 module.exports = (socket) ->
   (title = getTitle()) ->
-    language = dom.form.language.val()
+    language = dom.form.language.val().toLowerCase()
     languageCode = langify language
 
     if language is ""
       languageCode = "en"
 
-    else if language? and not languageCode? # if a bad language was given
+    else if language? and not languageCode? and language isnt "simple"
       Materialize.toast "#{language} is not a valid language", 4000
       return
 
