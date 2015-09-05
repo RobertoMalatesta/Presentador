@@ -19,7 +19,9 @@ from =
     from.title name.substring startingPoint
 
   title: (name) ->
-    name.replace(/_/g, " ")
+    name
+      .replace(/_/g, " ")
+      .replace(/-/g, " ")
 
 module.exports = (name) ->
   if isSubtitle name
