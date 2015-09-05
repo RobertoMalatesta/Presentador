@@ -6,6 +6,8 @@ If it detects that the section refers to a subsection of the article,
 it will use the subsection's name
 ###
 
+capitalize = (word) -> word.slice(0, 1).toUpperCase() + word.slice(1)
+
 isSubtitle = (name) ->
   "#" in name
 
@@ -25,6 +27,6 @@ from =
 
 module.exports = (name) ->
   if isSubtitle name
-    from.subtitle name
+    capitalize from.subtitle name
   else
-    from.title name
+    capitalize from.title name
