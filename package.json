@@ -5,7 +5,8 @@
   "main": "server.coffee",
   "scripts": {
     "init": "npm install && gulp",
-    "test": "mocha"
+    "test": "mocha",
+    "start": "PORT=8080 coffee server.coffee"
   },
   "repository": {
     "type": "git",
