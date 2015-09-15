@@ -21,7 +21,12 @@ if process.env.VERBOSE is "FALSE"
     error: logarithmic.error
 
 # will use the database in the following lines
-getPage = easypedia
+getPage = (name, options, next) ->
+  easypedia name, options, (error, page) ->
+    if error
+      logarithmic.error error
+    else
+      next page
 getImage = fotology
 
 logarithmic.alert "Trying to connect to the database"
@@ -39,52 +44,56 @@ mongoose.connection.on "open", ->
     searchQuery =
       name: pagename
       language: langify options.language
-    logarithmic.alert "Looking for #{pagename} in the #{options.language} DB"
+    logarithmic.alert "Look for #{pagename} in #{options.language} page DB"
     Page.findOne searchQuery, (finderror, databasePage)->
       if finderror
         logarithmic.warning finderror
       else if not databasePage?
-        logarithmic.alert "#{pagename} is not in the #{options.language} DB"
+        logarithmic.alert "#{pagename} not in #{options.language} page DB"
+        logarithmic.alert "Get #{pagename} from Easypedia"
         easypedia pagename, options, (easypediaerror, page) ->
-          next easypediaerror, pageEntry
           if easypediaerror
             logarithmic.warning easypediaerror
           else
             pageEntry =
-              name: page.name
               # the database matches the search terms to the pages
-              # thus, it uses the search lang, not the page lang
-              language: options.language
+              # thus, it uses the search name and language, not the page's
+              name: pagename
+              language: langify options.language
               links: page.links
               sections: page.sections
+            next pageEntry
             Page.create pageEntry, (createerror) ->
-              logarithmic.warning createerror if createerror
+              if createerror
+                logarithmic.warning createerror
+              else
+                logarithmic.ok "Saved #{pagename} to the pages DB"
 
-      else # if the page is in the database
-        logarithmic.ok "Found #{pagename} in the #{options.language} DB"
-        next finderror,
+      else if databasePage?
+        logarithmic.ok "Found #{pagename} in the #{options.language} page DB"
+        next
           name: databasePage.name
-          language: langify databasePage.language
           sections: databasePage.sections
           links: databasePage.links
 
   getImage = (imagename, options, next) ->
     imagename = imagename.toLowerCase()
-    logarithmic.alert "Looking in the database for #{imagename}"
+    options.language = options.language or "English"
+    logarithmic.alert "Look in image database for #{imagename}"
     searchQuery =
       name: imagename
-      language: options.language
+      language: langify options.language
     Image.findOne searchQuery, (error, databaseImage)->
       if not databaseImage
-        logarithmic.alert "#{imagename} is not in the database"
+        logarithmic.alert "#{imagename} not in image database"
         options.size = "medium"
         fotology imagename, options, (images) ->
-          logarithmic.ok "Found #{imagename} from the Google API"
+          logarithmic.ok "Find #{imagename} from the Google API"
           imageEntry =
             name: imagename
             # the database matches the search terms to the pages
             # thus, it uses the search lang, not the page lang
-            language: options.language
+            language: langify options.language
             url: images[0]
           next imageEntry
           Image.create imageEntry, (error, newimage) ->
@@ -124,47 +133,38 @@ io.sockets.on 'connection', (client) ->
 
   client.on 'get page', (page) ->
 
-    getPage page.title, {language: page.language}, (error, mainpage) ->
-      if error?
-        console.log error
-        sendError error
-        return
-
-      else
-        logarithmic.ok "Sending #{page.title} in #{page.language} to the client"
-        sendPage mainpage
-        return
-
+    getPage page.title, {language: page.language}, (mainpage) ->
+      logarithmic.ok "Send #{page.title} in #{page.language} to the client"
       sendPage mainpage
+
       getImage page.title, {}, sendImage
 
       # Wikipedia has a list of the images in a page
       # because we know those images exist, we want to use them
       # however, getting the images from Wikipedia is slow
       # thus, just search for the images on Google Image search
-      # also, if no images were found, just use the original pageName
+      # also, if no images were found, just use the original pagename
       imageSearchTerm = page.title
       options =
         size: "large"
         safe: true
-        language: page.language
+        language: langify page.language
 
-      isRelated = (possible) ->
-        if not possible?
-          return false
-        mainpage.name in possible.links
+      areRelated = (firstpage, secondpage) ->
+        firstpage? and secondpage? and
+        firstpage.name in secondpage.links and
+        firstpage.name in secondpage.links
 
       for link in mainpage.links.slice 0, maxLinks
-        getPage link, {language: page.language}, (error, linkedPage) ->
-          if error
-            sendError error
-          else if isRelated linkedPage
+        getPage link, {language: page.language}, (linkedPage) ->
+          if areRelated mainpage, linkedPage
             sendPage linkedPage
-            getImage linkedPage.name, {}, (error, page) ->
-              if error
-                sendError error
-              else
-                sendImage page
+            getImage linkedPage.name, {}, (image) ->
+              sendImage image
+          else
+            logarithmic.alert (
+              "#{linkedPage.name} and #{mainpage.name} are not related"
+            )
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
