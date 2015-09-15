@@ -22,10 +22,8 @@ socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
 socket.on 'new page', (page) ->
-  console.log page
   dom.div.slides.append make.section page
 socket.on 'new error', (error) ->
-  console.log error
   Materialize.toast error.message, 4000
 
 socket.on 'new image', make.image
