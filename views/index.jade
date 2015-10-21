@@ -9,36 +9,31 @@ head
 body
     .row#input-area
         form
-            .input-field.col.s5
-                input#title.validate(type="text", style="color: white")
-                label(for='title') Presentation Title
+          .input-field.col.s6
+              input#title.validate(type="text", style="color: white")
+              label(for='title') Presentation Title
+          .input-field.col.s2(style="color:white")
+              input#language.validate(type='text')
+              label(for='language') Language (English by default)
 
-            .input-field.col.s3(style="color:white")
-                input#language.validate(type='text')
-                label(for='language') Language
-            
-            .input-field.col.s1(style="color:white")
-                a.waves-effect.waves-light.btn#generate Insert
-            .input-field.col.s1(style="color:white")
-                a.waves-effect.waves-light.btn#fullscreen Expand
-            .input-field.col.s1(style="color:white")
-                a.waves-effect.waves-light.btn#clear Clear
-            .input-field.col.s1(style="color:white")
-                a.waves-effect.waves-light.btn#hide Hide
+          .input-field.col.s1(style="color:white")
+              a.waves-effect.waves-light.btn#generate Go!
+          .input-field.col.s1(style="color:white")
+              a.waves-effect.waves-light.btn#hide Hide Menu
 
-    a.waves-effect.waves-light.btn#show(style="display:none;float:right") Show
+    a.waves-effect.waves-light.btn#show(style="display:none;float:right") Menu
     .reveal#reveal
         .slides
             section
                 section#title-section
                     h1 Presentador
                     h2
-                        | By 
-                        a(href="//github.com/AbhinavMadahar") Abhinav Madahar
-                    p Navigate via the arrow keys
-                    p
-                        | File a bug report on the 
-                        a(href="https://github.com/AbhinavMadahar/Presentador/issues") GitHub Issue Tracker
+                      strike Lazy
+                      |  Efficient 
+                      | PowerPoint
+                    p If Wikipedia knows it, I know it
+                    p Type your presentation's title and let the magic happen
+                    p Example: "Abraham Lincoln"
 
     script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
     script(src="//cdnjs.cloudflare.com/ajax/libs/reveal.js/3.0.0/js/reveal.min.js")

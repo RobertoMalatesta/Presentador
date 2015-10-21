@@ -27,7 +27,10 @@ getPage = (name, options, next) ->
       logarithmic.error error
     else
       next page
-getImage = fotology
+getImage = (searchterm, options, next) ->
+  options.size = "large"
+  fotology searchterm, options, (links) ->
+    if links then next links
 
 logarithmic.alert "Trying to connect to the database"
 mongoose.connect databaseURI
@@ -86,8 +89,10 @@ mongoose.connection.on "open", ->
     Image.findOne searchQuery, (error, databaseImage)->
       if not databaseImage
         logarithmic.alert "#{imagename} not in image database"
-        options.size = "medium"
+        options.size = "large"
         fotology imagename, options, (images) ->
+          if not images
+            return
           logarithmic.ok "Find #{imagename} from the Google API"
           imageEntry =
             name: imagename
@@ -119,8 +124,6 @@ app.use compression()
 
 app.use require("./routes.coffee")
 
-maxLinks = process.env.MAXLINKS or 30 # how many links to search for
-
 io.sockets.on 'connection', (client) ->
   sendPage = (page) ->
     io.to(client.id).emit 'new page', page
@@ -150,12 +153,18 @@ io.sockets.on 'connection', (client) ->
         safe: true
         language: langify page.language
 
-      areRelated = (firstpage, secondpage) ->
-        firstpage? and secondpage? and
-        firstpage.name in secondpage.links and
-        firstpage.name in secondpage.links
+      isInside = (array) ->
+        (element) -> array.indexOf(element) isnt -1
+      intersection = (firstArray, secondArray) ->
+        firstArray.filter isInside secondArray
+      areRelated = (firstPage, secondPage) ->
+        # uses a geometric mean instead of arithmetic mean
+        lesserLength = Math.min firstPage.links.length, secondPage.links.length
+        minimumIntersectionLength = Math.sqrt lesserLength
+        pageIntersection = intersection firstPage.links, secondPage.links
+        pageIntersection.length >= minimumIntersectionLength
 
-      for link in mainpage.links.slice 0, maxLinks
+      for link in mainpage.links
         getPage link, {language: page.language}, (linkedPage) ->
           if areRelated mainpage, linkedPage
             sendPage linkedPage

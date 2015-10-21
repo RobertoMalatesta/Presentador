@@ -16,3 +16,9 @@ module.exports =
     hide: $ "#hide"
     clear: $ "#clear"
     show: $ "#show"
+
+    dpad:
+      up: $ ".navigate-up"
+      down: $ ".navigate-down"
+      left: $ ".navigate-left"
+      right: $ ".navigate-right"

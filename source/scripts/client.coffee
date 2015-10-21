@@ -14,15 +14,21 @@ make =
   image: require './create/image.coffee'
 animations = require "./animations.coffee"
 dom = require './dom.coffee'
-clear = require './clear.coffee'
 
 # connect to the server via a websocket
 # then tell the generate function where to send the "new page" requests
 socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
+noPagesAdded = true
 socket.on 'new page', (page) ->
   dom.div.slides.append make.section page
+  Materialize.toast "#{page.name} added to slide", 750
+  if noPagesAdded
+    Reveal.initialize()
+    console.log dom.button.dpad
+    dom.button.dpad.right.click()
+    noPagesAdded = false
 socket.on 'new error', (error) ->
   Materialize.toast error.message, 4000
 
@@ -39,8 +45,6 @@ dom.button.hide.click animations.searchbar.toggle
 dom.button.show.click animations.searchbar.toggle
 
 dom.button.fullscreen.click animations.body.fullscreen.enable
-
-dom.button.clear.click clear
 
 $(document).keydown (event) ->
   if event.keyCode is 220 # backslash
