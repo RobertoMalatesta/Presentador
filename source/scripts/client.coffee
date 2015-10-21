@@ -26,7 +26,6 @@ socket.on 'new page', (page) ->
   Materialize.toast "#{page.name} added to slide", 750
   if noPagesAdded
     Reveal.initialize()
-    console.log dom.button.dpad
     dom.button.dpad.right.click()
     noPagesAdded = false
 socket.on 'new error', (error) ->
