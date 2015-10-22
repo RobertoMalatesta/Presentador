@@ -20,15 +20,39 @@ dom = require './dom.coffee'
 socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
-totalPages = 0
-socket.on 'new page', (page) ->
-  if totalPages < 20
-    dom.div.slides.append make.section page
-    totalPages++
-    Materialize.toast "#{page.name} added to slide", 750
-    if totalPages is 0
-      Reveal.initialize()
-      dom.button.dpad.right.click()
+mainPages = []
+savedPages = []
+socket.on 'main page', (page) ->
+  dom.div.slides.append make.section page
+  mainPages.push page
+  savedPages.push page
+  Materialize.toast "#{page.name} added to slide", 750
+socket.on 'new page', (newPage) ->
+  if savedPages.length > 30
+    return
+
+  # avoiding adding a page twice
+  if savedPages.map((page) -> page.name).indexOf(newPage.name) isnt -1
+    return
+
+  savedPages.push newPage
+  Materialize.toast "#{newPage.name} added to slide", 750
+
+  isInside = (array) ->
+    (element) -> array.indexOf(element) isnt -1
+  intersection = (firstArray, secondArray) ->
+    firstArray.filter isInside secondArray
+  areRelated = (firstPage, secondPage) ->
+    meanLength = Math.sqrt firstPage.links.length * secondPage.links.length
+    minimumIntersectionLength = 1.25 * Math.sqrt meanLength
+    pageIntersection = intersection firstPage.links, secondPage.links
+    intersectEnough = pageIntersection.length >= minimumIntersectionLength
+    intersectEnough
+
+  for mainpage in mainPages
+    if areRelated mainpage, newPage
+      dom.div.slides.append make.section newPage
+      break
 
 socket.on 'new error', (error) ->
   Materialize.toast error.message, 4000
