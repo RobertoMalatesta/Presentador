@@ -125,6 +125,9 @@ app.use compression()
 app.use require("./routes.coffee")
 
 io.sockets.on 'connection', (client) ->
+  sendMainPage = (page) ->
+    io.to(client.id).emit 'main page', page
+
   sendPage = (page) ->
     io.to(client.id).emit 'new page', page
 
@@ -138,7 +141,7 @@ io.sockets.on 'connection', (client) ->
 
     getPage page.title, {language: page.language}, (mainpage) ->
       logarithmic.ok "Send #{page.title} in #{page.language} to the client"
-      sendPage mainpage
+      sendMainPage mainpage
 
       getImage page.title, {}, sendImage
 
@@ -153,27 +156,11 @@ io.sockets.on 'connection', (client) ->
         safe: true
         language: langify page.language
 
-      isInside = (array) ->
-        (element) -> array.indexOf(element) isnt -1
-      intersection = (firstArray, secondArray) ->
-        firstArray.filter isInside secondArray
-      areRelated = (firstPage, secondPage) ->
-        meanLength = Math.sqrt firstPage.links.length * secondPage.links.length
-        minimumIntersectionLength = 1.25 * Math.sqrt meanLength
-        pageIntersection = intersection firstPage.links, secondPage.links
-        intersectEnough = pageIntersection.length >= minimumIntersectionLength
-        intersectEnough
-
       for link in mainpage.links
         getPage link, {language: page.language}, (linkedPage) ->
-          if areRelated mainpage, linkedPage
-            sendPage linkedPage
-            getImage linkedPage.name, {}, (image) ->
-              sendImage image
-          else
-            logarithmic.alert (
-              "#{linkedPage.name} and #{mainpage.name} are not related"
-            )
+          sendPage linkedPage
+          getImage linkedPage.name, {}, (image) ->
+            sendImage image
 
 port = process.env.PORT or 80
 hostname = process.env.HOSTNAME or '0.0.0.0'
