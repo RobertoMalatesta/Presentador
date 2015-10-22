@@ -28,15 +28,12 @@ socket.on 'main page', (page) ->
   savedPages.push page
   Materialize.toast "#{page.name} added to slide", 750
 socket.on 'new page', (newPage) ->
-  if savedPages.length > 30
+  if savedPages.length > 30 # avoid adding too many pages
     return
 
   # avoiding adding a page twice
   if savedPages.map((page) -> page.name).indexOf(newPage.name) isnt -1
     return
-
-  savedPages.push newPage
-  Materialize.toast "#{newPage.name} added to slide", 750
 
   isInside = (array) ->
     (element) -> array.indexOf(element) isnt -1
@@ -51,6 +48,8 @@ socket.on 'new page', (newPage) ->
 
   for mainpage in mainPages
     if areRelated mainpage, newPage
+      savedPages.push newPage
+      Materialize.toast "#{newPage.name} added to slide", 750
       dom.div.slides.append make.section newPage
       break
 
