@@ -159,7 +159,7 @@ io.sockets.on 'connection', (client) ->
         firstArray.filter isInside secondArray
       areRelated = (firstPage, secondPage) ->
         meanLength = Math.sqrt firstPage.links.length * secondPage.links.length
-        minimumIntersectionLength = Math.sqrt meanLength
+        minimumIntersectionLength = 1.25 * Math.sqrt meanLength
         pageIntersection = intersection firstPage.links, secondPage.links
         intersectEnough = pageIntersection.length >= minimumIntersectionLength
         intersectEnough

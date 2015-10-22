@@ -20,14 +20,16 @@ dom = require './dom.coffee'
 socket = io.connect()
 generate = require('./generate.coffee')(socket)
 
-noPagesAdded = true
+totalPages = 0
 socket.on 'new page', (page) ->
-  dom.div.slides.append make.section page
-  Materialize.toast "#{page.name} added to slide", 750
-  if noPagesAdded
-    Reveal.initialize()
-    dom.button.dpad.right.click()
-    noPagesAdded = false
+  if totalPages < 20
+    dom.div.slides.append make.section page
+    totalPages++
+    Materialize.toast "#{page.name} added to slide", 750
+    if totalPages is 0
+      Reveal.initialize()
+      dom.button.dpad.right.click()
+
 socket.on 'new error', (error) ->
   Materialize.toast error.message, 4000
 
