@@ -25,6 +25,8 @@ savedPages = []
 socket.on 'main page', (page) ->
   dom.div.slides.append make.section page
   mainPages.push page
+  if mainPages.length is 1
+    Reveal.initialize()
   savedPages.push page
   Materialize.toast "#{page.name} added to slide", 750
 socket.on 'new page', (newPage) ->
@@ -95,3 +97,4 @@ $(document).ready ->
 
 Reveal.initialize
   center: true
+
